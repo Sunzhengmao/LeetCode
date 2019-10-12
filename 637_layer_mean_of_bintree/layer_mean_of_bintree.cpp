@@ -14,6 +14,7 @@ using namespace std;
 class Solution
 {
     public:
+    queue<TreeNode*> empty;
     vector<double> averageOfLevels(TreeNode* root) 
     {
         queue<TreeNode*> currentNode,nextNode;
@@ -28,7 +29,7 @@ class Solution
     private:
     void bfs(queue<TreeNode*>& currentN, queue<TreeNode*>& nextN, vector<double>& result)
     {
-        int sum = 0;
+        double sum = 0;
         int num = 0;
         while (!currentN.empty())
         {
@@ -41,7 +42,6 @@ class Solution
         }
         result.push_back(sum / num);
         currentN = nextN;
-        queue<TreeNode*> empty;
         swap(nextN, empty);
     }
 };
