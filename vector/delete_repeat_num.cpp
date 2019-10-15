@@ -65,6 +65,7 @@ public:
             nums.insert(nums.begin() ,nums[n]);
             k--;
         }
+        
     }
 
 作者：wu-shi-sui-lao-yi
