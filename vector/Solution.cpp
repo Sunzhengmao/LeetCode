@@ -4,6 +4,7 @@
 using namespace std;
 class Solution {
 public:
+//===============================================================================================================
     //26、去除数组中重复的数字，并返回最后结果的数组个数，这里只能除去一些按照顺序排列的数组，
     //    主要应用了快指针和满指针来减小空间复杂度
     int _26_removeDuplicates(vector<int>& nums) 
@@ -21,7 +22,7 @@ public:
         }
         return p;
     }
-
+//===============================================================================================================
     //912、给定一个整数数组 nums，将该数组升序排列
     vector<int> _912_sortArray(vector<int>& nums) 
     {   
@@ -65,13 +66,32 @@ public:
             nums.insert(nums.begin() ,nums[n]);
             k--;
         }
-        
     }
 
-作者：wu-shi-sui-lao-yi
-链接：https://leetcode-cn.com/problems/rotate-array/solution/c-shua-lai-pi-jie-fa-by-wu-shi-sui-lao-yi/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+//=====================================================================================================================
+    //88、给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
+    void _88_merge(vector<int>& nums1, int m, vector<int>& nums2, int n) 
+    {
+        nums1.resize(m);
+        nums2.resize(n);
+        vector<int>::iterator nums1_pt = nums1.begin(), nums1_next = nums1_pt+1;
+        //想对nums2进行遍历，对每一个nums2找到nums1的位置
+        for(vector<int>::size_type i=0; i!=nums2.size(); i++)
+        {
+            for (; ;nums1_pt++,nums1_next++)
+            {   
+                if (*nums1_pt<=nums2[i] && nums2[i]<*nums1_next)
+                {   
+                    vector<int>::iterator tmp1 = nums1_pt;
+                    vector<int>::iterator tmp2 = nums1_next;
+                    nums1.insert(nums1_pt, nums2[i]);
+                    nums1_pt = tmp1+1;
+                    nums1_next = tmp2+1;
+                    break;
+                }
+            }
+        }        
+    }
 };
 
 int main()
@@ -84,5 +104,10 @@ int main()
     //test 189
     vector<int> test189 = {1,2,3,4,5,6,7};
     solution->_189_rotate(test189,6);
+
+    //test 88
+    vector<int> nums1={1,2,3,4,5,6};
+    vector<int> nums2={4,5};
+    solution->_88_merge(nums1, 6, nums2, 2);
     return 0;
 }
