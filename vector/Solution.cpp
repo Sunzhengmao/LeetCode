@@ -142,7 +142,7 @@ public:
         }
         return nums;       
     }
-    // 选择排序，原来我一开始用的是选择排序不是冒泡。。。
+    // (4)选择排序，原来我一开始用的是选择排序不是冒泡。。。
     // 和冒泡排序相似，区别在于选择排序是将每一个元素和它后面的每一个元素进行比较和交换，从而找到最小值
     // 最好：O(n2)
     // 最坏：O(n2)
@@ -159,8 +159,7 @@ public:
         return nums;
     }
 
-//==================================================================================================================================
-    // 插入排序
+    // (5)插入排序
     // 把第2个值拿出来以此和前面的进行比较（前一个），如果确实没有前面的小，就把前面的值赋到这个位置上，然后把tmp给前面；
     // 如果tmp还是比前面这个小，就继续这个动作，直到不小为之。
     // 主要是从第二个值开始以此跟前面所有的进行比较，把最小的放到最前面
@@ -183,8 +182,7 @@ public:
         return nums;
     }
 
-//==================================================================================================================================
-    // 快速排序
+    // (6)快速排序
     // 选择一个元素作为基数（通常是第一个元素），把比基数小的元素放到它左边，比基数大的元素放到它右边（相当于二分），再不断递归基数左右两边的序列。
     // 快速排序之填坑
     // 从右边向中间推进的时候，遇到小于基数的数就赋给左边（一开始是基数的位置），右边保留原先的值等之后被左边的值填上。
@@ -216,7 +214,7 @@ public:
     //     for (int i=t1.size()-1; i>=0; i--)
     //         result.insert(result.begin(), t1[i]);
     // }
-    void quickSort(int arr[], int left, int right) 
+    void quickSort(int arr[], int left, int right) //我猜这里left是第一个，right是最后一个
     {
         if(left >= right)  return;
         // 取第一个数为基数
@@ -226,11 +224,12 @@ public:
         {
             int p = left;
             int q = right;
-            while(p < q) {
-            while(p < q && arr[q] >= temp)  q--;
-            arr[p] = arr[q];
-            while(p < q && arr[p] < temp)  p++;
-            arr[q] = arr[p];
+            while(p < q) 
+            {
+                while(p < q && arr[q] >= temp)  q--;
+                arr[p] = arr[q];
+                while(p < q && arr[p] < temp)  p++;
+                arr[q] = arr[p];
             }
             index = q;
         }
@@ -241,7 +240,6 @@ public:
         quickSort(arr, index + 1, right);
     }
 
-//===================================================================================================================
     // 桶排序
     // 将数组元素有序分配到n个桶里，最后再合并各个桶
     // 最好：O(n)，每个数都在分布在一个桶里，这样就可以省略将数插入排序到桶里的时间(类似于计数排序以空间换时间)。
@@ -258,7 +256,7 @@ public:
                 max=nums[i];
             }
         }
-        vector<int> result(max+1, 0);
+        vector<int> result(max+1, 0);//这是那个桶，index是待排序数组的值
         for (int i = 0; i < nums.size(); i++)
         {
             result[nums[i]]++;//把有这个值的都加一
@@ -266,10 +264,43 @@ public:
         vector<int> output;
         for (int j = 0; j < result.size(); j++)
         {
-            if(result[j]!=0)
+            while(result[j]!=0)
+            {
                 output.push_back(j);
+                result[j]--;
+            }
         }
         return output;        
+    }
+
+//==================================================================================================================
+    // 给定一个整数数组 A，如果它是有效的山脉数组就返回 true，否则返回 false。
+    bool _941_validMountainArray(vector<int>& A) 
+    {
+        if(A[1] <= A[0]) return false;//如果第一个数没有第二个数小，就直接false好了
+        int max = A[1];
+        bool startdown = false;
+        for(vector<int>::size_type i=2; i!=A.size(); i++)
+        {
+            if (A[i] > max && !startdown)
+            {
+                max = A[i];
+                continue;
+            }
+            //如果能到这说明A[i]<=max
+            startdown = true;
+            if(A[i] < max)
+            {
+                max = A[i];
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return startdown;
+        
     }
 
 };
@@ -291,7 +322,11 @@ int main()
     // solution->_88_merge(nums1, 6, nums2, 2);
 
     //test 912
-    vector<int> input912={4,2,3,7,6,9,0};
+    vector<int> input912={4,2,3,3,2,7,6,9,0};
     vector<int> output = solution->_912_sortArray_bucketSort(input912);
+
+    //teset 941
+    vector<int> input941 = {1,3,7,9};
+    bool output941 = solution->_941_validMountainArray(input941);
     return 0;
 }
