@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<map>
+#include<algorithm>
 using namespace std;
 class Solution {
 public:
@@ -214,30 +215,32 @@ public:
     //     for (int i=t1.size()-1; i>=0; i--)
     //         result.insert(result.begin(), t1[i]);
     // }
-    void quickSort(int arr[], int left, int right) //我猜这里left是第一个，right是最后一个
+
+    void _912_sortArray_quickSort(int left, int right, vector<int>& arr)
     {
-        if(left >= right)  return;
-        // 取第一个数为基数
-        int temp = arr[left]; 
-        int index = 0;
-        // 将小于基数的数放到基数左边，大于基数的数放到基数右边，并返回基数的位置
+        if(left >= right)
+            return;
+        int i, j, base, temp;
+        i = left, j = right;
+        base = arr[left];  //取最左边的数为基准数
+        while (i < j)
         {
-            int p = left;
-            int q = right;
-            while(p < q) 
+            while (arr[j] >= base && i < j)
+                j--;
+            while (arr[i] <= base && i < j)
+                i++;
+            if(i < j)
             {
-                while(p < q && arr[q] >= temp)  q--;
-                arr[p] = arr[q];
-                while(p < q && arr[p] < temp)  p++;
-                arr[q] = arr[p];
+                temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
             }
-            index = q;
         }
-        // 修改基数的位置
-        arr[index] = temp;
-        // 递归排序基数左右两边的序列
-        quickSort(arr, left, index - 1);
-        quickSort(arr, index + 1, right);
+        //基准数归位
+        arr[left] = arr[i];
+        arr[i] = base;
+        _912_sortArray_quickSort(left, i - 1, arr);//递归左边
+        _912_sortArray_quickSort(i + 1, right, arr);//递归右边
     }
 
     // 桶排序
@@ -292,7 +295,6 @@ public:
             if(A[i] < max)
             {
                 max = A[i];
-
             }
             else
             {
@@ -300,7 +302,20 @@ public:
             }
         }
         return startdown;
-        
+    }
+
+//================================================================================================================
+    //561、给定长度为 2n 的数组, 你的任务是将这些数分成 n 对, 例如 (a1, b1), (a2, b2), ..., (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大。
+    //第一感觉是先排序，然后从最小的开始隔一个取一个，桶排序可能会好一些，试一下
+    int _561_arrayPairSum(vector<int>& nums) 
+    {
+        sort(nums.begin(),nums.end());
+        int sum=0;
+        for (int i = 0; i < nums.size(); i=i+2)
+        {
+            sum+=nums[i];
+        }
+        return sum;
     }
 
 };
