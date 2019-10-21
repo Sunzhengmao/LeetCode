@@ -2,6 +2,7 @@
 #include<vector>
 #include<map>
 #include<algorithm>
+#include<math.h>
 using namespace std;
 class Solution {
 public:
@@ -317,7 +318,59 @@ public:
         }
         return sum;
     }
+//===============================================================================================================
+    //989、对于非负整数 X 而言，X 的数组形式是每位数字按从左到右的顺序形成的数组。例如，如果 X = 1231，那么其数组形式为 [1,2,3,1]。
+    //果真出现了int保存不下的数，所以需要换个思路了，对每一位进行操作
+    vector<int> _989_addToArrayForm(vector<int>& A, int K) 
+    {
+        int last = K;
+        for (vector<int>::size_type i = A.size(); i != 0; i--)
+        {
+            last = last + A[i-1];
+            A[i-1] = (last) % 10;
+            last = last/10;
+            if(last==0) break;
+        }
+        while(last!=0)
+        {
+            A.insert(A.begin(), last%10);
+            last /= 10;
+        }
+        return A;
+    }
 
+//==============================================================================================================
+    //932、对于某些固定的 N，如果数组 A 是整数 1, 2, ..., N 组成的排列，使得：对于每个 i < j，都不存在 k 满足 i < k < j 
+    //使得 A[k] * 2 = A[i] + A[j]。那么数组 A 是漂亮数组。
+    vector<int> _932_beautifulArray(int N) 
+    {
+        
+    }
+
+//==============================================================================================================
+    //915、给定一个数组 A，将其划分为两个不相交（没有公共元素）的连续子数组 left 和 right
+    int partitionDisjoint(vector<int>& A) 
+    {   
+        int index = 0;
+        bool UcanStop = true;
+        for(int i = 0; i!=A.size(); i++)
+        {
+            max = A[i];
+            for(int j = A.size(); j!=i; j--)
+            {
+                if(A[j-1]<max) 
+                {
+                    UcanStop = false;
+                    break;
+                }
+            }
+            if(UcanStop) 
+            {
+                index = i;
+                break;
+            }
+        }
+    }
 };
 
 int main()
@@ -343,5 +396,9 @@ int main()
     //teset 941
     vector<int> input941 = {1,3,7,9};
     bool output941 = solution->_941_validMountainArray(input941);
+
+    //test 989
+    vector<int> input989 = {9,9,9,9,9,9,9};
+    vector<int> output989 = solution->_989_addToArrayForm(input989, 1);
     return 0;
 }
