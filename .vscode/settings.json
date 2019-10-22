@@ -4,5 +4,6 @@
         "xlocale": "cpp",
         "vector": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "python.pythonPath": "D:\\software\\Anaconda\\python.exe"
 }

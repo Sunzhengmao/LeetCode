@@ -348,17 +348,16 @@ public:
     }
 
 //==============================================================================================================
-    //915、给定一个数组 A，将其划分为两个不相交（没有公共元素）的连续子数组 left 和 right
-    int partitionDisjoint(vector<int>& A) 
-    {   
-        int index = 0;
-        bool UcanStop = true;
+/*      由于时间复杂度有点高，所以想换个方法
+        int max_in_Left = 0;
         for(int i = 0; i!=A.size(); i++)
         {
-            max = A[i];
-            for(int j = A.size(); j!=i; j--)
+            bool UcanStop = true;
+            if(max_in_Left<A[i]) 
+                max_in_Left = A[i];//left中最大的要小于right中最小的
+            for(int j = A.size()-1; j!=i; j--)//依次遍历求最小
             {
-                if(A[j-1]<max) 
+                if(A[j]<max_in_Left) //如果不满足大于left的最大的，就退出吧，如果都满足了就可以return i了
                 {
                     UcanStop = false;
                     break;
@@ -366,10 +365,30 @@ public:
             }
             if(UcanStop) 
             {
-                index = i;
-                break;
+                return i+1;
             }
         }
+*/
+    //915、给定一个数组 A，将其划分为两个不相交（没有公共元素）的连续子数组 left 和 right
+    //不知道为什么别人就能想出来我就不行。。。如果
+    int _915_partitionDisjoint(vector<int>& A) 
+    {   
+        int lmax = A[0];
+        int rmax = A[1];
+        int left = 0;
+        int N = A.size();
+        for (int i = 1; i < N; ++i) 
+        {
+            rmax = max(rmax, A[i]);//当前最大值
+            if (A[i] < lmax) //一出现比左边最大值还要小的就得更新left，因为要找到第一个不满足≤左边最大值的点，这样才能保证left右边比左边都大
+            {
+                left = i;
+                lmax = max(lmax, rmax);//同时还要保证此时我的左边的最大的是当前最大的，如果还有比左边最大值更大的值。。。妈的越说越乱
+                //left右边还有比左边更大的，如果没有降到max_in_left下，证明他们都可以算成右序列了，否则就是降到下面，比他们还要小，就得更新max_in_left
+                //怎么说呢，还是朝着简单的方向走，而且把条件分析清楚，还是对题意理解不透彻   
+            }
+        }
+        return left + 1;        
     }
 };
 
@@ -400,5 +419,9 @@ int main()
     //test 989
     vector<int> input989 = {9,9,9,9,9,9,9};
     vector<int> output989 = solution->_989_addToArrayForm(input989, 1);
+
+    //test 915
+    vector<int> input915 = {5,0,3,8,6};
+    int output915 = solution->_915_partitionDisjoint(input915);
     return 0;
 }
