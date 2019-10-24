@@ -390,6 +390,47 @@ public:
         }
         return left + 1;        
     }
+
+//====================================================================================================================
+    //905、给定一个非负整数数组 A，返回一个数组，在该数组中， A 的所有偶数元素之后跟着所有奇数元素。
+    //输入：[3,1,2,4], 输出：[2,4,3,1]
+    vector<int> _905_sortArrayByParity(vector<int>& A) 
+    {
+        int left=0, right = A.size()-1;
+        while(1)
+        {
+            while((A[left]%2==0) && (left<right))//是偶数就要换下一个，因为要和后面的偶数进行替换
+                left++;
+            while((A[right]%2!=0) && (left<right))//是奇数就得找下一个，因为奇数留在后面
+                right--;
+            if(left<right)
+                swap(A[left], A[right]);
+            else break;
+        }
+        return A;
+    }
+
+//==================================================================================================================
+    //448、给定一个范围在  1 ≤ a[i] ≤ n ( n = 数组大小 ) 的 整型数组，数组中的元素一些出现了两次，另一些只出现一次。
+    //输入:[4,3,2,7,8,2,3,1]，输出:[5,6]
+    vector<int> _448_findDisappearedNumbers(vector<int>& nums) 
+    {
+        map<int, int> output;
+        vector<int> result;
+        int max=0;
+        for(int i = 0; i!=nums.size(); i++)
+        {
+            if(nums[i]>max)
+                max=nums[i];
+            output[nums[i]]++;
+        }
+        for(int i = 1; i<=max; i++)
+        {
+            if(output[i]==0)
+                result.push_back(i);
+        }
+        return result;
+    }
 };
 
 int main()
@@ -423,5 +464,13 @@ int main()
     //test 915
     vector<int> input915 = {5,0,3,8,6};
     int output915 = solution->_915_partitionDisjoint(input915);
+
+    //test 905
+    vector<int> input905 = {5,3,1,2,4};
+    vector<int> output905 = solution->_905_sortArrayByParity(input905);
+
+    //test 448
+    vector<int> input448 = {4,5,3,1,7};
+    vector<int> ouput448 = solution->_448_findDisappearedNumbers(input448);
     return 0;
 }
