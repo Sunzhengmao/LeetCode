@@ -415,19 +415,28 @@ public:
     //输入:[4,3,2,7,8,2,3,1]，输出:[5,6]
     vector<int> _448_findDisappearedNumbers(vector<int>& nums) 
     {
-        map<int, int> output;
+
+        // 用map还是慢啊，计算哈希算子本身就比较费时间，所以最好能跳过，每次即使遍历
+        // map<int, int> output;
+        // vector<int> result;
+        // for(vector<int>::iterator i = nums.begin(); i!=nums.end(); i++)
+        //     output[*i]++;
+        // for(int i = 1; i<=nums.size(); i++)
+        // {
+        //     if(output[i]==0)
+        //         result.push_back(i);
+        // }
+        // return result;
         vector<int> result;
-        int max=0;
-        for(int i = 0; i!=nums.size(); i++)
+        for(int i = 0; i<nums.size(); i++)
         {
-            if(nums[i]>max)
-                max=nums[i];
-            output[nums[i]]++;
+            while (nums[i]!=nums[nums[i]-1])
+                swap(nums[i], nums[nums[i]-1]);
         }
-        for(int i = 1; i<=max; i++)
+        for(int i = 0; i<nums.size(); i++)
         {
-            if(output[i]==0)
-                result.push_back(i);
+            if(nums[i] != (i+1))
+                result.push_back(i+1);
         }
         return result;
     }
@@ -470,7 +479,7 @@ int main()
     vector<int> output905 = solution->_905_sortArrayByParity(input905);
 
     //test 448
-    vector<int> input448 = {4,5,3,1,7};
+    vector<int> input448 = {4,5,3,1,7,2,1};
     vector<int> ouput448 = solution->_448_findDisappearedNumbers(input448);
     return 0;
 }
