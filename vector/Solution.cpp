@@ -440,6 +440,25 @@ public:
         }
         return result;
     }
+    
+//==================================================================================================================
+    //442、给定一个整数数组 a，其中1 ≤ a[i] ≤ n （n为数组长度）, 其中有些元素出现两次而其他元素出现一次。
+    vector<int> _442_findDuplicates(vector<int>& nums) 
+    {
+        vector<int> ret;
+        //思路是对原数组进行处理，对应位置上放i，如果对应位置上已经有i了，就证明重复了呗
+        for (int i=0; i!=nums.size(); i++)
+        {
+            while(nums[i] != nums[nums[i]-1])
+                swap(nums[i],nums[nums[i]-1]);  // nums[i]-1位置放置nums[i]元素
+        }
+        for(int i=0; i!=nums.size(); i++)
+        {
+            if(nums[i]!=i+1)
+                ret.push_back(nums[i]);
+        }
+        return ret;        
+    }
 };
 
 int main()
@@ -481,5 +500,9 @@ int main()
     //test 448
     vector<int> input448 = {4,5,3,1,7,2,1};
     vector<int> ouput448 = solution->_448_findDisappearedNumbers(input448);
+
+    //test 442
+    vector<int> input442 = {4,3,2,7,8,2,3,1};
+    vector<int> output442 = solution->_442_findDuplicates(input442);
     return 0;
 }

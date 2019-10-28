@@ -2,7 +2,8 @@
     "files.associations": {
         "queue": "cpp",
         "xlocale": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "utility": "cpp"
     },
     "cmake.configureOnOpen": false,
     "python.pythonPath": "D:\\software\\Anaconda\\python.exe"
