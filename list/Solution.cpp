@@ -1,11 +1,11 @@
 #include <iostream>
 #include <list>
-#include <map>
 #include <vector>
+#include <map>
 using namespace std;
 
-// Definition for singly-linked list.
-struct ListNode {
+struct ListNode
+{
     int val;
     ListNode *next;
     ListNode(int x) : val(x), next(NULL) {}
@@ -13,38 +13,47 @@ struct ListNode {
 
 class Solution
 {
+public:
 //=====================================================================================================================
-    //创建一个新链表
     ListNode *initial(vector<int> nums)
     {
         ListNode *root = new ListNode(nums[0]);
-        for(int i=0; i!=nums.size(); i++)
+        ListNode *tmp = root->next;
+        for (int i = 1; i < nums.size(); i++)
         {
-            root->val = nums[i];
-            root = root->next;
+            ListNode* nextNode = new ListNode(nums[i]);
+            *nextNode = *tmp;
+            tmp->next = nextNode->next;
         }
+        return root;
     }
 //=====================================================================================================================
-    //160、编写一个程序，找到两个单链表相交的起始节点。
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
+    //206、反转一个单链表。
+    ListNode* _206_reverseList(ListNode* head) 
     {
-        map<int, int> temp;
-        int i = 0;
-        while (headA)
+        map<int, int> tmp;
+        for (int i = 0; head!=NULL; i++)
         {
-            temp.insert(i, headA->val);
-            headA = headA->next;
+            int num = head->val;
+            tmp.insert(make_pair(i,num));
+            head = head->next;
         }
-        return headA;       
+            
+        
         
     }
 };
 
+
+
+
 int main()
 {
-    Solution solution;
-    //test 160
-    ListNode input160 
-}
+    cout<<"hello world"<<endl;
 
- 
+    Solution* solution;
+    vector<int> input = {1,2,3,4,5};
+    ListNode* output = solution->initial(input);
+
+    return 1;
+}

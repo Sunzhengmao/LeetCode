@@ -44,5 +44,6 @@
         "xutility": "cpp"
     },
     "cmake.configureOnOpen": false,
-    "python.pythonPath": "D:\\software\\Anaconda\\python.exe"
+    "python.pythonPath": "D:\\software\\Anaconda\\python.exe",
+    "C_Cpp.errorSquiggles": "Enabled"
 }
