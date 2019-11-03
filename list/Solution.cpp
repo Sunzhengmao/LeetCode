@@ -15,17 +15,16 @@ class Solution
 {
 public:
 //=====================================================================================================================
-    ListNode *initial(vector<int> nums)
+    ListNode *initial(vector<int> nums, ListNode* head)
     {
-        ListNode *root = new ListNode(nums[0]);
-        ListNode *tmp = root->next;
-        for (int i = 1; i < nums.size(); i++)
+        // ListNode *root = new ListNode(nums[0]);
+        // ListNode *tmp = root->next;
+        for (int i = 0; i < nums.size(); i++)
         {
-            ListNode* nextNode = new ListNode(nums[i]);
-            *nextNode = *tmp;
-            tmp->next = nextNode->next;
+            ListNode* NewNode = new ListNode(nums[i]);
+            head->next = NewNode;
+            head = head->next;
         }
-        return root;
     }
 //=====================================================================================================================
     //206、反转一个单链表。
@@ -53,7 +52,8 @@ int main()
 
     Solution* solution;
     vector<int> input = {1,2,3,4,5};
-    ListNode* output = solution->initial(input);
+    ListNode* output = new ListNode(0);
+    solution->initial(input, output);
 
     return 1;
 }
