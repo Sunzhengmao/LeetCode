@@ -17,13 +17,27 @@ public:
 //=====================================================================================================================
     void initial(vector<int> nums, ListNode* head)
     {
-        head->val = nums[0];
+        // head->val = nums[0];
         for (int i = 1; i < nums.size(); i++)
         {
             ListNode* NewNode = new ListNode(nums[i]);
             head->next = NewNode;
             head = head->next;
         }
+    }
+
+    //在有了指针的理解后重新写一个initial的函数
+    ListNode* initial(vector<int> nums)
+    {
+        ListNode* head = new ListNode(nums[0]);
+        ListNode* result = head;
+        for(int i=1; i!=nums.size(); i++)
+        {
+            ListNode* tmpNode = new ListNode(nums[i]);
+            head->next = tmpNode;
+            head = head->next;
+        }
+        return result;
     }
 
 //====================================================================================================================
@@ -44,8 +58,11 @@ public:
                 iteration = iteration->next;
         }
         return head;
+    }
 
-        /*那我试一下新建一个list
+    ListNode* _83_deleteDuplicates_newlist(ListNode* head) 
+    {
+        //那我试一下新建一个list
         int tmp=head->val;//放每个listnode的value
         ListNode* result;
         vector<int> something={tmp};
@@ -59,7 +76,7 @@ public:
             }
         }
         initial(something, result);
-        return result;*/
+        return result;
     }
 
 //===================================================================================================================
@@ -67,18 +84,29 @@ public:
     ListNode* _206_reverseList(ListNode* head) 
     {
         vector<int> something;//放head的每个元素吧
-        ListNode* result;
-        int num=0;
-        for(; head!=NULL; num++)
+        while(head)
         {
             something.insert(something.begin(), head->val);
             head=head->next;
         }
-        initial(something, result);
+        return initial(something);
+    }
+
+    //又有一个新想法，我可不可以每次都往list的前面插值
+    ListNode* _206_reverseList_insert(ListNode* head)
+    {
+        ListNode* result = new ListNode(head->val);
+        head = head->next;
+        while(head)
+        {
+            ListNode* tmp = new ListNode(head->val);
+            tmp->next = result;
+            result = tmp;
+            head=head->next;
+        }
+        return result;
     }
 };
-
-
 
 
 int main()
@@ -86,18 +114,25 @@ int main()
     cout<<"hello world"<<endl;
 
     Solution* solution;
+    // 第一种初始化方法
     vector<int> input = {1,1,1,2};
     ListNode* output = new ListNode(1);
     solution->initial(input, output);
+
+    // 第二种初始化方法
+    vector<int> input1 = {1,4,3,2,5};
+    ListNode* output1 = solution->initial(input1);
 
     //test 83
     ListNode* output83 = solution->_83_deleteDuplicates(output);
 
     //test 206
     vector<int> input206_ = {1,2,3,4,5};
-    ListNode* input206;
-    solution->initial(input206_, input206);
+    ListNode* input206 = solution->initial(input206_);
     ListNode* output206 = solution->_206_reverseList(input206);
+    ListNode* output206_= solution->_206_reverseList_insert(input206);
+
+
 
     return 1;
 }
