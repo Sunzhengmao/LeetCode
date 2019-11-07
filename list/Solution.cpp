@@ -106,6 +106,38 @@ public:
         }
         return result;
     }
+
+//===================================================================================================================
+    //160、编写一个程序，找到两个单链表相交的起始节点。
+    //先试一下哈希表的方法吧
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
+    {
+        map<int,int> mapA,mapB;
+        ListNode* result=NULL;//只要加上这么一个初始化就不会出现result的第一个val瞎搞了
+        int numA=0;
+        int numB=0;
+        while(headA!=NULL)
+        {
+            numA++;
+            mapA[numA]=headA->val;
+            headA=headA->next;
+        }
+        while(headB)
+        {
+            numB++;
+            mapB[numB]=headB->val;
+            headB=headB->next;
+        }   
+        while(mapA[numA]==mapB[numB])//最后返回的是第一个不满足的numA
+        {
+            ListNode* newNode = new ListNode(mapB[numB]);
+            newNode->next = result;
+            result=newNode;
+            numA--;
+            numB--;
+        }
+        return result;
+    }
 };
 
 
@@ -132,7 +164,12 @@ int main()
     ListNode* output206 = solution->_206_reverseList(input206);
     ListNode* output206_= solution->_206_reverseList_insert(input206);
 
-
+    //test 160
+    vector<int> headA_ = {4,1,8,4,5};
+    vector<int> headB_ = {5,0,1,8,4,5};
+    ListNode* headA = solution->initial(headA_);
+    ListNode* headB = solution->initial(headB_);
+    ListNode* result = solution->getIntersectionNode(headA, headB);
 
     return 1;
 }
