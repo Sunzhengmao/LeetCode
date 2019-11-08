@@ -143,11 +143,9 @@ public:
     //203、删除链表中等于给定值 val 的所有节点。
     ListNode* _203_removeElements(ListNode* head, int val) 
     {
-        ListNode* result=NULL;
-        if(!head||(head->val==val&&!head->next)) return NULL;
         while(head && head->val==val)
             head=head->next;
-        result=head;
+        ListNode* result=head;
         if(!result) return result;
         while(head->next)
         {
