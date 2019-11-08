@@ -138,6 +138,26 @@ public:
         }
         return result;
     }
+
+//============================================================================================================
+    //203、删除链表中等于给定值 val 的所有节点。
+    ListNode* _203_removeElements(ListNode* head, int val) 
+    {
+        ListNode* result=NULL;
+        if(!head||(head->val==val&&!head->next)) return NULL;
+        while(head && head->val==val)
+            head=head->next;
+        result=head;
+        if(!result) return result;
+        while(head->next)
+        {
+            if(head->next->val==val)//如果相等证明这个head->next要被删除
+                head->next=head->next->next;
+            else
+                head=head->next;
+        }
+        return result;
+    }    
 };
 
 
@@ -170,6 +190,12 @@ int main()
     ListNode* headA = solution->initial(headA_);
     ListNode* headB = solution->initial(headB_);
     ListNode* result = solution->getIntersectionNode(headA, headB);
+
+    //test 203
+    vector<int> head_203={1,1,2};
+    ListNode* head203 = solution->initial(head_203);
+    ListNode* output203 = solution->_203_removeElements(head203, 1);
+    
 
     return 1;
 }
