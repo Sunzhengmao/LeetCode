@@ -155,7 +155,69 @@ public:
                 head=head->next;
         }
         return result;
-    }    
+    }   
+
+//===========================================================================================================
+    //61、给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+    ListNode* _61_rotateRight(ListNode* head, int k) 
+    {
+        vector<int> tmp;
+        ListNode* headTmp=head;
+        int num=0;
+        long int j = k;
+        bool Ucan=true;
+        while (headTmp)
+        {
+            num++;
+            headTmp=headTmp->next;
+
+            //num>k大说明在一遍之内就可以完成，不用取余，就算取余了也是0，就别浪费时间了
+            //num=k也没关系，会退出的，j=0，
+            //num<k小就用取余，num是一个一个加的，如果没加到k就不会执行下面的，就得取余了
+            if(num > k)
+            {
+                Ucan=false;
+                break;
+            }
+        }
+        if(Ucan)
+            j = k % num;
+
+
+        //构建两个链表，前j个放到新链表(laterOne)，后面(former)num-j个遍历出最后一个来，把前j个接到最后一个上面，
+        ListNode* result = new ListNode(head->val);
+        ListNode* laterOne = head;
+        ListNode* laterOne_last = NULL; 
+        ListNode* former = NULL;
+        ListNode* former_last = NULL;
+        head=head->next;
+        int i=2;
+        while(head)
+        {
+            if(i<=j)
+            {
+                // ListNode* newNode = new ListNode(head->val);
+                // result->next = newNode;
+                // result=result->next;
+                laterOne_last = head;
+                head=head->next;
+                i++;
+            }
+            else
+            {
+                if(i==j+1)//取出来结果的头指针
+                {
+                    former=head;
+                    i++;
+                }    
+                former_last=head;//存former指针的最后一个指针，如果是最后一个就直接退出了
+                head=head->next;
+            }            
+        }
+        laterOne_last->next=NULL;
+        former_last->next = laterOne;
+        return former;
+    }
 };
 
 
@@ -193,6 +255,11 @@ int main()
     vector<int> head_203={1,1,2};
     ListNode* head203 = solution->initial(head_203);
     ListNode* output203 = solution->_203_removeElements(head203, 1);
+
+    //test 61
+    vector<int> head_61={1,2,3,4,5};
+    ListNode* head61 = solution->initial(head_61);
+    ListNode* ouput61 = solution->_61_rotateRight(head61, 3);
     
 
     return 1;
