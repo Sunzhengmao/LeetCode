@@ -110,7 +110,7 @@ public:
 //===================================================================================================================
     //160、编写一个程序，找到两个单链表相交的起始节点。
     //先试一下哈希表的方法吧
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
+    ListNode *_160_getIntersectionNode_hash(ListNode *headA, ListNode *headB) 
     {
         map<int,int> mapA,mapB;
         ListNode* result=NULL;//只要加上这么一个初始化就不会出现result的第一个val瞎搞了
@@ -139,11 +139,25 @@ public:
         return result;
     }
 
+    //这个代码是真的简洁啊，直接用?:就可以了，只是内存消耗有点高
+    ListNode* _160_getIntersectionNode_doublePointer(ListNode* headA, ListNode* headB)
+    {
+        if(headA==NULL || headB==NULL) return NULL;
+        ListNode* pA = headA;
+        ListNode* pB = headB;
+        while(pA != pB)
+        {
+            pA = pA==NULL ? headB : pA->next;
+            pB = pB==NULL ? headA : pB->next;
+        }
+        return pA;
+    }
+
 //============================================================================================================
     //203、删除链表中等于给定值 val 的所有节点。
     ListNode* _203_removeElements(ListNode* head, int val) 
     {
-        while(head && head->val==val)
+        while(head && head->val==val)//删头结点中与val相同的值
             head=head->next;
         ListNode* result=head;
         if(!result) return result;
@@ -223,6 +237,26 @@ public:
     //61、给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
     ListNode* _61_rotateRight_shunshizhen(ListNode* head, int k) 
     {
+        if(!head) return head;
+        ListNode* headTmp=head;
+        int num=0;
+        bool Ucan=true;
+        while (headTmp)
+        {
+            num++;
+            headTmp=headTmp->next;
+
+            //num>k大说明在一遍之内就可以完成，不用取余，就算取余了也是0，就别浪费时间了
+            //num=k也没关系，会退出的，j=0，
+            //num<k小就用取余，num是一个一个加的，如果没加到k就不会执行下面的，就得取余了
+            if(num > k)
+            {
+                Ucan=false;
+                break;
+            }
+        }
+        if(Ucan)
+            k = k % num;
         ListNode* b=head;
         ListNode* a=head;
         int i=0;
