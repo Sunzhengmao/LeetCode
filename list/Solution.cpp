@@ -159,7 +159,7 @@ public:
 
 //===========================================================================================================
     //61、给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
-    ListNode* _61_rotateRight(ListNode* head, int k) 
+    ListNode* _61_rotateRight_nishizhen(ListNode* head, int k) 
     {
         vector<int> tmp;
         ListNode* headTmp=head;
@@ -218,6 +218,38 @@ public:
         former_last->next = laterOne;
         return former;
     }
+
+//==============================================================================================================
+    //61、给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+    ListNode* _61_rotateRight_shunshizhen(ListNode* head, int k) 
+    {
+        ListNode* b=head;
+        ListNode* a=head;
+        int i=0;
+        // while(b)
+        // {   
+        //     if(k)
+        //     {
+        //         b=b->next;
+        //         k--;
+        //         break;
+        //     }
+        //     a=a->next;
+        //     b=b->next;
+        // }
+        while(b->next)
+        {
+            b=b->next;
+            if(k<=0)
+                a=a->next;
+            k--;
+        }
+        b->next=head;
+        ListNode* result = a->next;
+        a->next=NULL;
+        return result;
+    }
+
 };
 
 
@@ -259,7 +291,7 @@ int main()
     //test 61
     vector<int> head_61={1,2,3,4,5};
     ListNode* head61 = solution->initial(head_61);
-    ListNode* ouput61 = solution->_61_rotateRight(head61, 3);
+    ListNode* ouput61 = solution->_61_rotateRight_shunshizhen(head61, 2);
     
 
     return 1;
