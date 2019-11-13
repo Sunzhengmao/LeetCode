@@ -81,8 +81,8 @@ public:
     //70、爬楼梯，感觉这不是栈的想法，而是递归或者别的
     int _70_climbStairs(int n) 
     {
-        vector<int> tmp(n,1);
         if(n<=2) return n;
+        vector<int> tmp(n,1);
         tmp[1]=2;
         for(int i=2; i<n; i++)
             tmp[i]=tmp[i-1]+tmp[i-2];
