@@ -76,6 +76,18 @@ public:
         else 
             return false;
     }
+
+//============================================================================================================
+    //70、爬楼梯，感觉这不是栈的想法，而是递归或者别的
+    int _70_climbStairs(int n) 
+    {
+        if(n<=2) return n;
+        vector<int> tmp(n,1);
+        tmp[1]=2;
+        for(int i=2; i<n; i++)
+            tmp[i]=tmp[i-1]+tmp[i-2];
+        return tmp[n-1];        
+    }
 };
 
 int main()
@@ -85,6 +97,9 @@ int main()
     //test 20
     string s("()()()");
     bool isRight = solution->_20_isValid_czh(s);
+
+    //test 70
+    int output70 = solution->_70_climbStairs(6);
 
 
     return 1;
