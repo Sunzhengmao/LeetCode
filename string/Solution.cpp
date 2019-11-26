@@ -168,8 +168,11 @@ public:
     {
         stack<char> tmp;
         int num=0;
+        vector<char>::iterator end_ = chars.end()-1;
+        int t=0;
         for (vector<char>::iterator iter = chars.begin(); iter != chars.end(); iter++)
         {
+            t++;
             if(tmp.empty())
             {
                 tmp.push(*iter);
@@ -180,13 +183,16 @@ public:
             {
                 num++;
                 iter = chars.erase(iter);
+                // iter--;
                 continue;
             }
+            tmp.pop();
             char num_char = num + '0';
+            // iter--;
             chars.insert(iter, num_char);
             num=0;
         }
-        
+        return chars.size();
     }
 };
 
@@ -219,6 +225,24 @@ int main()
     string s394 = "3[a]2[bc]";
     string s394_inner = "3[ab2[cd2[e]]]mm";
     string output394 = solution->_394_decodeString(s394_inner);
+
+    //test 443
+    vector<char> test443 = {'1','2','3','4','5','6','7','8','9'};
+    for (vector<char>::iterator iter = test443.begin(); iter != test443.end(); iter++)
+    {
+        // iter = test443.erase(iter);
+        // cout<<*iter<<endl;        
+        // cout<<*(test443.end()-1)<<endl;
+        iter++;
+        test443.insert(iter, 'a');
+        cout<<*iter<<endl;        
+        cout<<*(test443.end()-1)<<endl;
+    }
+    
+    vector<char> chars = {'a','b','c','d','e','f'};
+    int size_ = solution->_443_compress(chars);
+
+
 
 
     return 1;
