@@ -240,6 +240,35 @@ public:
         }
         return cnt;
     }
+
+//============================================================================================================
+    //557、给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+    string _557_reverseWords(string s) 
+    {
+        stack<char> container;
+        string tmp;
+        for(int i=0; i<s.size(); i++)
+        {
+            if (s[i] == ' ') //如果是空格
+            {
+                while (!container.empty())
+                {
+                    tmp += container.top();
+                    container.pop();
+                }
+                tmp+=' ';
+                continue;
+            }
+            //如果不是空格，就需要往stack里面加东西
+            container.push(s[i]);
+        }
+        while (!container.empty())
+        {
+            tmp += container.top();
+            container.pop();
+        }
+        return tmp;
+    }
 };
 
 
@@ -284,9 +313,13 @@ int main()
     //     // cout<<*iter<<endl;        
     //     // cout<<*(test443.end()-1)<<endl;
     // }
-    
     vector<char> chars = {'a','b','c','d','e','f'};
     int size_ = solution->_443_compress(chars);
+
+    // test 557
+    string test557 = "Let's take LeetCode contest";
+    string output557 = solution->_557_reverseWords(test557);
+    int i=1;
 
 
 
