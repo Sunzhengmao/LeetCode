@@ -164,13 +164,21 @@ public:
 
 //========================================================================================================
     //443、给定一组字符，使用原地算法将其压缩。
+    // 所以这里是错的，insert一个元素后，整个vector被复制到新的地址，所以end操作注定失效，但iter可以通过赋值来保证其连续性
+
+    //=========================================补充知识===================================================
+    //-- 1.当插入一个元素后，end操作返回的迭代器肯定失效
+    //-- 2.当插入一个元素后，capacity若和插入之前相比有改变，则需要重新加载正个容器，此时first和end的操作返回的迭代器都会失效，
+    //     如果没有重新分配，那么 插入点之前的迭代器有效，插入点之后的iterator失效
+    //-- 3.当进行删除操作后，删除点之前的迭代器有效，指向删除点的全部迭代器失效，指向删除点后面元素迭代器也全部会失效
     int _443_compress(vector<char>& chars) 
     {
         stack<char> tmp;
-        int num=0;
+        int num=1;
         vector<char>::iterator end_ = chars.end()-1;
         int t=0;
-        for (vector<char>::iterator iter = chars.begin(); iter != chars.end(); iter++)
+        vector<char>::iterator iter = chars.begin();
+        for (; iter != chars.end(); iter++)
         {
             t++;
             if(tmp.empty())
@@ -189,10 +197,48 @@ public:
             tmp.pop();
             char num_char = num + '0';
             // iter--;
-            chars.insert(iter, num_char);
+            iter = chars.insert(iter, num_char);
             num=0;
         }
+
         return chars.size();
+    }
+    
+    int _443_compress_right(vector<char>& chars)
+    {
+                int n=chars.size();
+        int i=0;
+        //cnt记录结果数组的长度
+        int cnt=0;
+        while(i<n)
+        {
+            int j=i+1;
+            //该循环实现找到第一个和重复字符不等的位置
+            while(j<n&&chars[j]==chars[i])
+                j++;
+            //加入重复字符
+            chars[cnt++]=chars[i];
+            int dif=j-i;
+            //若需要压缩,则压缩
+            if(dif>1)
+            {
+                //这儿用栈实现整数的位数分解,实际上可以直接用to_string方法来获得每一位的数字
+                stack<char> st;
+                while(dif)
+                {
+                    st.push(dif%10+'0');
+                    dif/=10;
+                }
+                while(!st.empty())
+                {
+                    chars[cnt++]=st.top();
+                    st.pop();
+                }
+            }   
+            //让i指向j当前的字符
+            i=j;
+        }
+        return cnt;
     }
 };
 
@@ -228,16 +274,16 @@ int main()
 
     //test 443
     vector<char> test443 = {'1','2','3','4','5','6','7','8','9'};
-    for (vector<char>::iterator iter = test443.begin(); iter != test443.end(); iter++)
-    {
-        // iter = test443.erase(iter);
-        // cout<<*iter<<endl;        
-        // cout<<*(test443.end()-1)<<endl;
-        iter++;
-        test443.insert(iter, 'a');
-        cout<<*iter<<endl;        
-        cout<<*(test443.end()-1)<<endl;
-    }
+    // for (vector<char>::iterator iter = test443.begin(); iter != test443.end(); iter++)
+    // {
+    //     iter = test443.erase(iter);
+    //     cout<<*iter<<endl;        
+    //     cout<<*(test443.end()-1)<<endl;
+    //     // iter = test443.insert(iter, ((num++) + '0'));
+    //     // iter++;
+    //     // cout<<*iter<<endl;        
+    //     // cout<<*(test443.end()-1)<<endl;
+    // }
     
     vector<char> chars = {'a','b','c','d','e','f'};
     int size_ = solution->_443_compress(chars);
