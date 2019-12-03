@@ -10,6 +10,7 @@ class Solution
 {
 private:
     /* data */
+
 public:
     Solution(/* args */);
     ~Solution();
@@ -269,6 +270,96 @@ public:
         }
         return tmp;
     }
+
+//==================================================================================================================
+    //43、给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+    string _43_multiply(string num1, string num2) 
+    {
+        if (num1=="0" || num2=="0") return 0;
+        if(num1.size() > num2.size()) swap(num1, num2);
+        int pow_big = 0;
+        vector<string> S_;
+        for (int i = num1.size()-1; i >= 0; i--)
+        {
+            int tmp = 0;
+            int shiwei = 0;
+            string s_ = "";
+            for (int j = num2.size()-1; j >= 0; j--)
+            {
+                int gewei = (num1[i]-'0') * (num2[j]-'0');
+                tmp = gewei % 10 + shiwei;
+                shiwei = gewei/10;
+                s_.insert(s_.begin(), tmp+'0');
+            }
+            if(shiwei) s_.insert(s_.begin(), shiwei+'0');
+            for(int k=0; k<pow_big; k++)
+            {
+                s_ += (0 + '0');
+            }    
+            S_.push_back(s_);   
+            pow_big++;
+        }
+        string result = "";
+        int jinwei = 0;
+        for (int i = 1; i <= (num1.size()+num2.size()); i++)     
+        {   
+            int tmp = 0;
+            for(auto s : S_)
+            {
+                int kao = s[s.size()-i]-'0';
+                if(kao>=0 && kao<=9)
+                    tmp += kao;
+            }
+            result.insert(result.begin(), (jinwei+tmp)%10 + '0');
+            jinwei = (jinwei+tmp)/10;
+        }
+        if(jinwei) result.insert(result.begin(), jinwei);  
+        if(result[0]=='0') 
+            result.erase(result.begin());    
+        return result;
+    }
+
+    string _43_multiply_others(string num1, string num2)
+    {
+        int n1=num1.size();
+        int n2=num2.size();
+        string res(n1+n2,'0');
+        for(int i=n2-1;i>=0;i--)
+        {
+            for(int j=n1-1;j>=0;j--)
+            {
+                int temp=(res[i+j+1]-'0')+(num1[j]-'0')*(num2[i]-'0');
+                res[i+j+1]=temp%10+'0';//当前位
+                res[i+j]+=temp/10; //前一位加上进位，res[i+j]已经初始化为'0'，加上int类型自动转化为char，所以此处不加'0'
+            }
+        }
+        
+        //去除首位'0'
+        for(int i=0;i<n1+n2;i++)
+        {
+            if(res[i]!='0')
+                return res.substr(i);
+        }
+        return "0";
+    }
+
+//==================================================================================================================
+    //1047、给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
+    string _1047_removeDuplicates(string S) 
+    {
+        int i=0;  // i:lower
+        int j=i+1;// j:faster
+        for (; i < S.size(); i++)
+        {
+            j=i+1;
+            if(S[i]!=S[j]) continue;
+            while(S[i]==S[j])
+                j++;
+            
+        }
+        
+        
+    }
 };
 
 
@@ -321,8 +412,13 @@ int main()
     string output557 = solution->_557_reverseWords(test557);
     int i=1;
 
+    //test 43
+    string num1_43 = "999";
+    string num2_43 = "999";
+    string result43 = solution->_43_multiply(num1_43, num2_43);
 
 
 
+    int lastOne = 1;
     return 1;
 }
