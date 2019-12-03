@@ -351,14 +351,50 @@ public:
         int j=i+1;// j:faster
         for (; i < S.size(); i++)
         {
+            //如果不相等，就正好，可以进行下一个了
+            if(S[i]!=S[i+1])
+                continue;
+
             j=i+1;
-            if(S[i]!=S[j]) continue;
-            while(S[i]==S[j])
+            while(S[i]==S[j] && j<S.size() && j<i+2)//找出来从i到最后一个的所有的与i相等的
                 j++;
-            
+            S.erase(S.begin()+i, S.begin()+j);
+            i = i>=2 ? i-2 : -1;
         }
-        
-        
+        return S;        
+    }
+
+    string _1047_removeDuplicates_faster(string S)
+    {
+        for (int i = 0; i < S.size(); i++)
+        {   
+            if(S[i]==S[i+1])
+            {
+                S.erase(S.begin()+i, S.begin()+i+2);//我刚发现他只要减去2个就好
+                i = i>=2 ? i-2 : -1;    
+            }
+        }
+        return S;
+    }
+
+//================================================================================================================
+    //1209、给你一个字符串 s，「k 倍重复项删除操作」将会从 s 中选择 k 个相邻且相等的字母，
+    //      并删除它们，使被删去的字符串的左侧和右侧连在一起。
+    string _1209_removeDuplicates(string s, int k) 
+    {
+        for (int i = 0; i < s.size(); i++)
+        {
+            if(s[i]!=s[i+1]) continue;
+
+            int j = i+1;
+            while(s[i]==s[j] && j<s.size() && j<i+k)
+                j++;
+            // j = j > k ? k : j;
+            if((j - i) < k) continue;
+            s.erase(s.begin()+i, s.begin()+j);
+            i = i >= k ? i-k : -1;
+        }
+        return s;       
     }
 };
 
@@ -412,12 +448,18 @@ int main()
     string output557 = solution->_557_reverseWords(test557);
     int i=1;
 
-    //test 43
+    // test 43
     string num1_43 = "999";
     string num2_43 = "999";
     string result43 = solution->_43_multiply(num1_43, num2_43);
 
+    // test 1047
+    string S_1047 = "aaa";
+    string output_1047 = solution->_1047_removeDuplicates(S_1047);
 
+    // test 1209
+    string s_1209 = "deeedbbcccbdaa";
+    string output_1209 = solution->_1209_removeDuplicates(s_1209, 3);
 
     int lastOne = 1;
     return 1;
