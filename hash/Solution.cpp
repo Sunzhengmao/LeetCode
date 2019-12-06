@@ -150,6 +150,75 @@ public:
         }
         return result;
     }
+
+//========================================================================================================================
+    //1048、给出一个单词列表，其中每个单词都由小写英文字母组成。从给定单词列表 words 中选择单词组成词链，返回词链的最长可能长度。
+    //      这个最后还是没有答对，我是按照
+    int _1048_longestStrChain(vector<string>& words) 
+    {
+        vector<string> curr={}, pre={};
+        int string_size = 0;
+        for (int i = 0; i < words.size(); i++)
+        {
+            //先插进来一个
+            if(pre.empty())
+            {
+                curr.push_back(words[i]);
+                while (words[i].size()==words[i+1].size())
+                {
+                    curr.push_back(words[i+1]);
+                    i++;
+                }                
+            }
+            else
+            {
+                for (int j = 0; j < pre.size(); j++)
+                {
+                    if (str1_in_str2(pre[j], words[i]))
+                    {
+                        curr.push_back(words[i]);
+                        break;
+                    }
+                }   
+                while (words[i].size()==words[i+1].size())//看看下一个是否长度和当前一样，一样就可以继续判断是否可以加进来
+                {
+                    for (int j = 0; j < pre.size(); j++)
+                    {
+                        if (str1_in_str2(pre[j], words[i+1]))
+                        {
+                            curr.push_back(words[i+1]);
+                            break;
+                        }
+                    }    
+                    i++;            
+                }
+            }
+            pre = curr;
+            curr = {};
+            string_size++;
+        }
+        return string_size;
+    }
+
+    // 检测str1是否在str2中
+    bool str1_in_str2(string str1, string str2)
+    {
+        int j = 0;
+        int num = 0;
+        for (int i = 0; i < str1.size(); i++)
+        {
+            for (; j < str2.size(); j++)
+            {
+                if(str1[i]==str2[j])
+                {
+                    num++;
+                    break;
+                }
+            }
+        }
+        return (num==str1.size());
+    }
+
 };
 
 int main()
@@ -167,6 +236,10 @@ int main()
     // test 1138
     string target_1138 = "leet";
     string output_1138 = solution->_1138_alphabetBoardPath(target_1138);
+
+    // test 1048
+    vector<string> words_1048 = {"a","b","bac","bcade","abcdef","abcefg","abcdefg"};
+    int result_1048 = solution->_1048_longestStrChain(words_1048);
 
     return 1;
 }
