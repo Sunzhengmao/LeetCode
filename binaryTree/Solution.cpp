@@ -4,6 +4,7 @@
 #include <vector>
 #include <math.h>
 #include <map>
+#include <algorithm>
 using namespace std;
 
 // Definition for a binary tree node.                          
@@ -148,6 +149,53 @@ public:
         root->right = helpme(nums, median+1, right);
         return root;
     }
+
+//============================================================================================================
+    //107、给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+    vector<vector<int>> _107_levelOrderBottom(TreeNode* root) 
+    {
+        if(!root) return {};
+        if(!root->left && !root->right) return {{root->val}};//没有子树
+
+        vector<vector<int>> result={};
+        vector<int> tmp={};
+        vector<TreeNode*> curr={root};
+        vector<TreeNode*> next={};
+        while(!curr.empty())
+        {
+            for(int i=0; i<curr.size(); i++)
+            {
+                tmp.push_back(curr[i]->val);
+                if(curr[i]->left) next.push_back(curr[i]->left);//如果curr[i]的左右子树都非空
+                if(curr[i]->right) next.push_back(curr[i]->right);
+            }
+            result.insert(result.begin(), tmp);
+            tmp = {};
+            curr = next;
+            next = {};
+        }
+        return result;
+    }
+
+//===============================================================================================================
+    //111、给定一个二叉树，找出其最小深度。
+    int _111_minDepth(TreeNode* root) 
+    {
+        if(!root) return 0;
+        if(!root->left && !root->right) return 1;
+        return max(_111_minDepth(root->left), _111_minDepth(root->right));
+        // return max(1,0);
+    }
+
+//===============================================================================================================
+    //404、计算给定二叉树的所有左叶子之和。
+    int _404_sumOfLeftLeaves(TreeNode* root) 
+    {
+        if(!root) return 0;
+        if(root->left && !root->left->left && !root->left->right) //如果有左叶子，就返回0咯
+            return root->left->val + _404_sumOfLeftLeaves(root->left) + _404_sumOfLeftLeaves(root->right);
+        return _404_sumOfLeftLeaves(root->right) + _404_sumOfLeftLeaves(root->left);
+    }
 };
 
 int main()
@@ -163,7 +211,12 @@ int main()
 
     //test 108
     vector<int> vec_108 = {-10,-3,0,5,9};
-    TreeNode* root_108 = solution->_108_sortedArrayToBST(vec_108);
+    TreeNode* root_108 = solution->_108_sortedArrayToBST_fast(vec_108);
+
+    //test 404
+    vector<string> vec_404 = {"3","9","20","null","null","15","7"};
+    TreeNode* root_404 = solution->initialTreeNode(vec_404);
+    int result_404 = solution->_404_sumOfLeftLeaves(root_404);
 
     return 1;
 }
