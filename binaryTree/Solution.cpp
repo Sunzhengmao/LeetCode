@@ -263,7 +263,8 @@ public:
     //(2)用递归的思想会更简单一些
     TreeNode* _236_lowestCommonAncestor_digui(TreeNode* root, TreeNode* p, TreeNode* q) 
     {
-        if (!root || root==p || root==q) return root;
+        if (!root) return nullptr;
+        if (root==p || root==q) return root;
         TreeNode* left = _236_lowestCommonAncestor_digui(root->left, p, q);
         TreeNode* right= _236_lowestCommonAncestor_digui(root->right, p, q);
         //如果left为空，则返回右边；
