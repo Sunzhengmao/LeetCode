@@ -47,18 +47,19 @@ public:
                     }                    
                 }
                 else break;
+                i++;
 
-                if (i+1<vec.size()) 
+                if (i<vec.size()) 
                 {
-                    if(vec[i+1]!="null") 
+                    if(vec[i]!="null") 
                     {
-                        right = new TreeNode(stoi(vec[i+1]));
+                        right = new TreeNode(stoi(vec[i]));
                         copyFatherNode.push_back(right);
                         fatherNode[j]->right = right;
                     }                    
                 }
                 else break;
-                i=i+2;                
+                i++;                
             }
             fatherNode = copyFatherNode;
             copyFatherNode.clear();          
@@ -274,27 +275,72 @@ public:
         return left == nullptr? right : (right == nullptr? left : root); 
     }
 
+//===========================================================================================
+    //94、二叉树的中序遍历
+    vector<int> _94_midOrder(TreeNode* root)
+    {
+        if(!root) return {};
+        return _94_midOrder(root->left);
+        cout<<root->val<<endl;
+        return _94_midOrder(root->right);
+    }
+
+//===========================================================================================
+    //337、计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+    int _337_rob(TreeNode* root) 
+    {
+        //感觉我这里一大部分在处理只有两层时候的情况
+        if(!root) return 0;
+        if(!root->left && !root->right) return root->val;//左右子树都没有             
+        if(root->right && root->left)//如果左右子树有值，但左右子树的子树没值
+        {
+            if((!root->right->left && !root->right->right) && (!root->left->left && !root->left->right))
+            {
+                int a = root->left ? root->left->val : 0;
+                int b = root->right ? root->right->val : 0;
+                return max(root->val, a+b);
+            }
+        }
+        if (root->right && !root->left)
+        {
+            if(!root->right->left && !root->right->right)
+                return max(root->val, root->right->val);            
+        }
+        if (root->left && !root->right)
+        {
+            if(!root->left->left && !root->left->right)
+                return max(root->val, root->left->val);
+        }      
+
+        //这里才是递归的核心嘛，然后要注意隔着一层进行取的时候要判断隔的那一层是不是NULL
+        int tmp1 = root->left? (_337_rob(root->left->left) + _337_rob(root->left->right)) : 0;
+        int tmp2 = root->right? (_337_rob(root->right->left) + _337_rob(root->right->right)) : 0;
+        int num1 = root->val + tmp1 + tmp2;
+        int num2 = _337_rob(root->left) + _337_rob(root->right);
+        return max(num1, num2);
+    }
+
 };
 
 int main()
 {
     Solution* solution;
-    // vector<string> test = {"1", "2", "3", "null", "4"};
-    // TreeNode* test_output = solution->initialTreeNode(test);
+    vector<string> test = {"1", "2", "3", "null", "4"};
+    TreeNode* test_output = solution->initialTreeNode(test);
 
-    // // test 257
-    // vector<string> vec_257 = {"1","2","3","null","5"};
-    // TreeNode* root_257 = solution->initialTreeNode(vec_257);
-    // vector<string> result_257 = solution->_257_binaryTreePaths(root_257);
+    // test 257
+    vector<string> vec_257 = {"1","2","3","null","5"};
+    TreeNode* root_257 = solution->initialTreeNode(vec_257);
+    vector<string> result_257 = solution->_257_binaryTreePaths(root_257);
 
-    // //test 108
-    // vector<int> vec_108 = {-10,-3,0,5,9};
-    // TreeNode* root_108 = solution->_108_sortedArrayToBST_fast(vec_108);
+    //test 108
+    vector<int> vec_108 = {-10,-3,0,5,9};
+    TreeNode* root_108 = solution->_108_sortedArrayToBST_fast(vec_108);
 
-    // //test 404
-    // vector<string> vec_404 = {"3","9","20","null","null","15","7"};
-    // TreeNode* root_404 = solution->initialTreeNode(vec_404);
-    // int result_404 = solution->_404_sumOfLeftLeaves(root_404);
+    //test 404
+    vector<string> vec_404 = {"3","9","20","null","null","15","7"};
+    TreeNode* root_404 = solution->initialTreeNode(vec_404);
+    int result_404 = solution->_404_sumOfLeftLeaves(root_404);
 
     //test 236
     vector<string> vec_236 = {"3","5","1","6","2","0","8","null","null","7","4"};
@@ -304,6 +350,16 @@ int main()
     TreeNode* p_tree = solution->initialTreeNode(p_236);
     TreeNode* q_tree = solution->initialTreeNode(q_236);
     TreeNode* result_236 = solution->_236_lowestCommonAncestor_allPath(root_236, p_tree, q_tree);
+
+    //test 94
+    vector<string> vec_94 = {"1", "null", "2", "3"};
+    TreeNode* root_94 = solution->initialTreeNode(vec_94);
+    vector<int> result_94 = solution->_94_midOrder(root_94);
+
+    //test 337
+    vector<string> vec_337 = {"2","1","3","null","4"};
+    TreeNode* root_337 = solution->initialTreeNode(vec_337);
+    int result_337 = solution->_337_rob(root_337);
 
 
     return 1;
