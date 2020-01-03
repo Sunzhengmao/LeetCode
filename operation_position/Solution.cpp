@@ -2,10 +2,13 @@
 #include <vector>
 #include <map>
 #include <bitset>
+#include <math.h>
 using namespace std;
 
 class Solution
 {
+//==============================================================
+//位操作的几种：①异或；②奇数位与偶数位；③每位判断是0还是1；④每位输出
 private:
     /* data */
 public:
@@ -146,6 +149,42 @@ public:
         }   
         return result;
     }
+
+//=========================================================================================================
+    //231、给定一个整数，编写一个函数来判断它是否是 2 的幂次方。
+    bool _231_isPowerOfTwo(int n) 
+    {
+        int num_1 = 0;
+        while (n)
+        {
+            if (n & 1) num_1++;
+            if (num_1 > 1) return false;
+            n = n >> 1;
+            PrintfBinary(n);
+        }
+        return num_1==1? true:false;     
+    }
+
+    bool _231_isPowerOfTwo_others(int n)
+    {
+        if(n<=0) return false;
+        if((n&(n-1))==0) return true;
+        return false;  
+    }
+
+//========================================================================================================
+    //389、给定两个字符串s和t，字符串t随机位置添加一个字母。请找出在t中被添加的字母。
+    char _389_findTheDifference(string s, string t) 
+    {
+        char result = t[t.size()-1];
+        for (int i = 0; i < s.size(); i++)
+        {
+            result ^= s[i];
+            result ^= t[i];
+        }
+        return result;
+        
+    }
 };
 
 int main()
@@ -222,10 +261,9 @@ int main()
     g = (g_ji>>8) + g_ou;
     solution->PrintfBinary(g);
     cout<< g <<endl;
-
-
-
-    //======================================//
+    //====================================================//
+    //===============||    骚操作结束    ||===============//
+    //===================================================//
 
 
     // test 136
@@ -236,7 +274,29 @@ int main()
     vector<int> nums_169 = {3,2,2};
     int result_169 = solution->_169_majorityElement_1(nums_169);
 
-    // test 461
+    // test 231
+    int n_231 = -16;
+    bool result_231 = solution->_231_isPowerOfTwo(n_231);
+
+    // test char
+    char a_char = 'a';
+    solution->PrintfBinary(a_char);
+
+    // test int of 1
+    // -1    -> 1111 1111 1111 1111 1111 1111 1111 1111
+    // 2^31  -> 0111 1111 1111 1111 1111 1111 1111 1111 
+    // -2^31 -> 1000 0000 0000 0000 0000 0000 0000 0000
+    int a_int = pow(2, 31);
+    for (int i = 0; i < 100; i++)
+    {   
+        solution->PrintfBinary(a_int);
+        a_int++;
+    }
+    
+    int a_ = pow(2, 32);
+    int b_int = -1 *pow(2, 31);
+    solution->PrintfBinary(a_int);
+    solution->PrintfBinary(b_int);
 
     return 0;
 }
