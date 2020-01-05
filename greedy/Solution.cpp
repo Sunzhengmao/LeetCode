@@ -1,3 +1,8 @@
+/**
+ * 2020.1.3
+ * 所谓贪婪，就是在局部里面找最优的，然后放眼到全局，也能是最优的，所以我们需要将大路子合理的分划出小步子，然后
+ * 分别去计算就行
+ **/
 #include <math.h>
 #include <vector>
 #include <queue>
@@ -85,7 +90,79 @@ public:
         }
         return profit;        
     }
-    
+
+//=================================================================================================================================
+    //55、给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断是否能够到达最后一个位置。
+    bool _55_canJump(vector<int>& nums) 
+    {
+        //初步想法：找0的位置，如果不能跨过0的话，就肯定不行
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i]==0)//如果i不是最后一位
+            {
+                int loc = i-1;
+                int step = (i==(nums.size()-1))? 1:2;
+                bool IcanGo = false;
+                while (loc >= 0)
+                {   
+                    if(nums[loc] >= step)
+                    {   
+                        IcanGo = true;
+                        break;
+                    }
+                    loc--;
+                    step++;
+                }
+                if (!IcanGo)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    //----------------------------|| 最远位置 ||-----------------------------------//
+    //尽可能到达最远位置（贪心），如果能到达某个位置，那一定能到达它前面的所有位置。
+    //----------------------------|| 贪心算法 ||----------------------------------//
+    bool _55_canJump_greedy(vector<int>& nums)
+    {
+        int max_i = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (i<=max_i && nums[i]+i>max_i)
+            {
+                max_i = nums[i] + i;
+            }
+        }
+        return max_i>=nums.size()-1;        
+    }
+
+//==================================================================================================================
+    //45、同样的要跳到最后一个位置，但是这次要最小的步数
+    int _45_jump(vector<int>& nums) 
+    {
+        int count = 1;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if(nums[i]+i >= nums.size()-1) return count;
+            int max_step = 0;
+            int tmp = 0;
+            //这里才是贪婪的开始，要nums[i]范围内，能够往后走的最多
+            for (int j = 1; j <= nums[i]; j++)
+            {
+                if(j + nums[i+j] >= max_step)
+                {
+                    max_step = j + nums[i+j];
+                    tmp = j;
+                }
+            }
+            i += tmp-1;
+            count++;            
+        }
+        return 0;        
+    }
+
 };
 
 int main()
@@ -97,13 +174,21 @@ int main()
     int result_1221 = solution->_1221_balancedStringSplit(s_1221);
 
     //test 122
-    vector<int> prices_122 = {7,1,5,3,6,4,3,6,5,11,3,8,9,12,2,4,5,7,1,5,3,6,4,3,6,5,11,3,8,9,12,2,4,5,7,1,5,3,6,4,3,6,5,11,3,8,9,12,2,4,5};
+    vector<int> prices_122 = {7,1,5,3,6,4,3,6,5};
     clock_t start_122, end_122;
     start_122 = clock();
     int result_122 = solution->_122_maxProfit(prices_122);
     // int result_122 = solution->_122_maxProfit_better(prices_122);
     end_122 = clock();
-    cout<< (double)(end_122 - start_122)/CLOCKS_PER_SEC <<endl;
+    // cout<< (double)(end_122 - start_122)/CLOCKS_PER_SEC <<endl;
+
+    //test 55
+    vector<int> nums_55 = {2,0,0};
+    bool result_55 = solution->_55_canJump_greedy(nums_55);
+
+    //test 45
+    vector<int> nums_45 = {5,4,4,2,1,0,1};
+    int result_45 = solution->_45_jump(nums_45);
 
     return 1;   
 }
