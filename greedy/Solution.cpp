@@ -5,6 +5,7 @@
  **/
 #include <math.h>
 #include <vector>
+#include <algorithm>
 #include <queue>
 #include <stack>
 #include <list>
@@ -20,8 +21,7 @@ public:
     Solution(/* args */);
     ~Solution();
 
-//=========================================================================================================================
-    //1221、在一个「平衡字符串」中，'L' 和 'R' 字符的数量是相同的。给出一个平衡字符串 s，请你将它分割成尽可能多的平衡字符串
+//1221、在一个「平衡字符串」中，'L' 和 'R' 字符的数量是相同的。给出一个平衡字符串 s，请你将它分割成尽可能多的平衡字符串
     //这里其实是失败的，因为我没考虑万一不平衡了怎么办。。。
     int _1221_balancedStringSplit(string s) 
     {
@@ -48,8 +48,7 @@ public:
         return result;        
     }
 
-//============================================================================================================
-    //122、给定一个数组，它的第i个元素是一支给定股票第i天的价格。设计一个算法来计算你所能获取的最大利润。
+//122、 给定一个数组，它的第i个元素是一支给定股票第i天的价格。设计一个算法来计算你所能获取的最大利润。
     //     你可以多次买卖一支股票，你必须在再次购买前出售掉之前的股票
     //-----------------------------||   分析   ||--------------------------------------//
     //失败的原因是：时间复杂度太高，都无法在有限时间内跑完了，虽然是迭代的方法，好像是n4次方//
@@ -91,8 +90,7 @@ public:
         return profit;        
     }
 
-//=================================================================================================================================
-    //55、给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断是否能够到达最后一个位置。
+//55、  给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断是否能够到达最后一个位置。
     bool _55_canJump(vector<int>& nums) 
     {
         //初步想法：找0的位置，如果不能跨过0的话，就肯定不行
@@ -138,8 +136,7 @@ public:
         return max_i>=nums.size()-1;        
     }
 
-//==================================================================================================================
-    //45、同样的要跳到最后一个位置，但是这次要最小的步数
+//45、  同样的要跳到最后一个位置，但是这次要最小的步数
     int _45_jump(vector<int>& nums) 
     {
         int count = 1;
@@ -163,6 +160,80 @@ public:
         return 0;        
     }
 
+//392、 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
+    bool _392_isSubsequence(string s, string t) 
+    {
+        if(s.size()==0) return true;
+        int loc_t = 0;
+        for (int i = 0; i < s.size(); i++)
+        {
+            bool Ifoundit = false;
+            for (; loc_t < t.size(); loc_t++)
+            {
+                if (s[i] == t[loc_t])
+                {
+                    Ifoundit = true;
+                    break;
+                }
+            }
+            loc_t++;
+            if (!Ifoundit) return false;
+        }
+        return true;        
+    }
+
+//134、 加油站，从i中得到gas[i]个油，前往下一个加油站需要消耗cost[i]个油，返回能循环一周的索引，否则返回-1
+    int _134_canCompleteCircuit(vector<int>& gas, vector<int>& cost) 
+    {
+        //初步思路是从这个索引开始，如果每个的gas和都能大于cost和
+        
+        for (int i = 0; i < gas.size(); i++)
+        {
+            if(gas[i]<cost[i]) continue;
+            int index = i;
+            int count = 0;//记录走了几步了，走完size步才能停
+            int res = 0;
+            bool IcanDo = true;
+            while (count<gas.size())
+            {
+                count++;
+                res += gas[index]-cost[index];
+                if(res<0)
+                {
+                    IcanDo = false;
+                    break;
+                }
+                index = index>=(gas.size()-1) ? 0 : (index+1);//如果index已经大于
+            }
+            if(IcanDo) return index;
+        }
+        return -1;
+    }
+
+    //---------------------------------|| 官方题解 ||---------------------------------------//
+    //实现O(N)时间复杂度，还是很有技巧性的
+    //---------------------------------|| 官方题解 ||---------------------------------------//
+    int _134_canCompleteCircuit_offical(vector<int>& gas, vector<int>& cost)
+    {
+        int n = gas.size();
+        int total_tank = 0;
+        int curr_tank = 0;
+        int starting_station = 0;
+        for (int i = 0; i < n; ++i) 
+        {
+            total_tank += gas[i] - cost[i];
+            curr_tank += gas[i] - cost[i];
+            // If one couldn't get here,
+            if (curr_tank < 0) 
+            {
+                // Pick up the next station as the starting one.
+                starting_station = i + 1;
+                // Start with an empty tank.
+                curr_tank = 0;
+            }
+        }
+        return total_tank >= 0 ? starting_station : -1;
+    }
 };
 
 int main()
@@ -189,6 +260,11 @@ int main()
     //test 45
     vector<int> nums_45 = {5,4,4,2,1,0,1};
     int result_45 = solution->_45_jump(nums_45);
+
+    //test 134
+    vector<int> gas_134 = {1,2,3,4,5};
+    vector<int> cost_134 = {3,4,5,1,2};
+    int result_134 = solution->_134_canCompleteCircuit(gas_134, cost_134);
 
     return 1;   
 }
