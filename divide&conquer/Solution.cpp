@@ -119,6 +119,7 @@ public:
         result = select(nums, 0, numsSize - 1, kMin);
         return result;
     }
+    //找出来第target小的值
     int select(vector<int>& nums, int left, int right, int target)
     {
         if (left == right)
@@ -143,6 +144,7 @@ public:
         }
         return 0;
     }
+    //以最右边那个值为基准，开始将这个数放到他该去的位置上，左边都是小于他的，右边都是大于他的，返回他现在的位置，以示他是第几小
     int partition(vector<int> &nums, int left, int right)
     {
         int cut = nums[right];
