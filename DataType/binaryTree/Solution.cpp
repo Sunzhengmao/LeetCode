@@ -5,6 +5,7 @@
 #include <math.h>
 #include <map>
 #include <algorithm>
+#include <queue>
 #include <set>
 using namespace std;
 
@@ -24,6 +25,32 @@ private:
 public:
     Solution(/* args */);
     ~Solution();
+
+    //===========================================//
+    //---------------| 来自 MOOC |---------------//
+    //宽度优先搜索树，把每个结点的值输出到vector中
+    vector<int> _mooc_BFS(TreeNode* root)
+    {
+        if (!root) return {};
+        
+        vector<int> result = {};
+        
+        queue<TreeNode*> bfsNode;
+        bfsNode.push(root);
+
+        while (!bfsNode.empty())
+        {
+            // if (bfsNode.front())
+                result.push_back(bfsNode.front()->val);
+            if (bfsNode.front()->left)
+                bfsNode.push(bfsNode.front()->left);
+            if (bfsNode.front()->right)
+                bfsNode.push(bfsNode.front()->right);
+            bfsNode.pop();
+        }
+        return result;        
+    }
+
 
     // 从vector中生成一个TreeNode，可以用来自己验证
     TreeNode* initialTreeNode(vector<string> vec)
@@ -333,8 +360,11 @@ public:
 int main()
 {
     Solution* solution;
-    vector<string> test = {"1", "2", "3", "null", "4"};
+    vector<string> test = {"1", "2", "3", "null", "4", "5"};
     TreeNode* test_output = solution->initialTreeNode(test);
+
+    //test for MOOC
+    vector<int> mooc_output = solution->_mooc_BFS(test_output);
 
     // test 257
     vector<string> vec_257 = {"1","2","3","null","5"};
