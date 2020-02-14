@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <queue>
 #include <set>
+#include <stack>
 using namespace std;
 
 // Definition for a binary tree node.                          
@@ -50,6 +51,99 @@ public:
         }
         return result;        
     }
+
+    // 利用递归找父节点
+    TreeNode* _mooc_getFatherNode(TreeNode* root, int target)
+    {
+        if (!root) return NULL;
+        if (root->left)
+        {
+            if (root->left->val == target)
+            {
+                return root;
+            }
+        }
+        if (root->right)
+        {
+            if (root->right->val == target)
+            {
+                return root;
+            }
+        }
+        return _mooc_getFatherNode(root->left, target) ? _mooc_getFatherNode(root->left, target) :
+               _mooc_getFatherNode(root->right, target) ? _mooc_getFatherNode(root->right, target) : NULL;
+        
+    }
+
+    // 利用队列找父节点，宽搜
+    TreeNode* _mooc_getFatherNode_queue(TreeNode* root, int target)
+    {
+        if (!root) return NULL;
+        queue<TreeNode*> temp;
+        temp.push(root);
+
+        while (!temp.empty())
+        {
+            if (temp.front()->left)
+            {
+                if (temp.front()->left->val == target)
+                    return temp.front();
+            }
+            if (temp.front()->right)
+            {
+                if (temp.front()->right->val == target)
+                    return temp.front();
+            }
+            if (temp.front()->left)  temp.push(temp.front()->left);
+            if (temp.front()->right) temp.push(temp.front()->right);
+            temp.pop();
+        }       
+        return NULL;
+    }
+
+    // 利用栈找父节点，深搜
+    TreeNode* _mooc_getFatherNode_stack(TreeNode* root, int target)
+    {
+        if (!root) return NULL;
+        stack<TreeNode*> temp;
+        temp.push(NULL);
+
+        TreeNode* pointer = root;
+
+        while (pointer)
+        {
+            if (pointer->left)
+            {
+                if (pointer->left->val == target)
+                    return pointer;
+            }
+            if (pointer->right)
+            {
+                if (pointer->right->val == target)
+                    return pointer;
+            }
+
+            if (pointer->right)
+            {
+                temp.push(pointer->right);
+            }
+
+            if (pointer->left)
+            {
+                pointer = pointer->left;
+            }
+            else
+            {
+                pointer = temp.top();
+                temp.pop();
+            }
+        }
+        
+        return NULL;
+        
+    }
+    //-----------------------| MOOC over |-------------------------//
+    //=============================================================//
 
 
     // 从vector中生成一个TreeNode，可以用来自己验证
@@ -360,11 +454,14 @@ public:
 int main()
 {
     Solution* solution;
-    vector<string> test = {"1", "2", "3", "null", "4", "5"};
+    vector<string> test = {"1", "2", "3", "null", "4", "5", "null", "6", "7", "null", "9", "null", "null", "10"};
     TreeNode* test_output = solution->initialTreeNode(test);
 
     //test for MOOC
     vector<int> mooc_output = solution->_mooc_BFS(test_output);
+    TreeNode* mooc_fatherNode = solution->_mooc_getFatherNode(test_output, 9);
+    TreeNode* mooc_fatherNode_queue = solution->_mooc_getFatherNode_queue(test_output, 9);
+    TreeNode* mooc_fatherNode_stack = solution->_mooc_getFatherNode_stack(test_output, 0);
 
     // test 257
     vector<string> vec_257 = {"1","2","3","null","5"};
