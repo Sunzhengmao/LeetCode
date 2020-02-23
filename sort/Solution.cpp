@@ -11,24 +11,39 @@ public:
     Solution(/* args */);
     ~Solution();
 
-    //验证桶排序算法
-    // template<class Record>
-    void BucketSort(int Array[], int n, int max)
+    //桶排序算法
+    void BucketSort(vector<int>& Array, int max)
     {
-        int* TempArray = new int[n];
-        int* count = new int[max];
+        const int n = Array.size();
+        vector<int> TempArray = {};
+        vector<int> count(max, 0);
         int i;
         for (i=0; i<n; i++)
-            TempArray[i] = Array[i];
-        for (i=0; i<max; i++)
+            TempArray.push_back(Array[i]);
+        for (i=0; i<n; i++)
             count[Array[i]]++;
         for (i=1; i<max; i++)
             count[i] += count[i-1];
         for (i=n-1; i>=0; i--)
+            Array[--count[TempArray[i]]] = TempArray[i];
+    }
+
+    //快速排序
+    void QuickSort(vector<int>& input)
+    {
+        const int N = input.size();
+        int middle = N/2;
+        int i = 0;
+        int j = N-1;
+        while (i <= j)
         {
-            int index = count[TempArray[i]];
-            Array[--index] = TempArray[i];
+            while (input[i] > input[middle])
+            {
+                
+            }
+            
         }
+        
     }
 };
 /////////////////////////////////////////////////////
@@ -41,7 +56,7 @@ int main()
     Solution* solution;
 
     vector<int> input = {5,3,7,11,9,3};
-    solution->BucketSort(&input, input.size(), )
+    solution->BucketSort(input, 12);
 
     return 1;
 }
