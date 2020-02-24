@@ -29,21 +29,57 @@ public:
     }
 
     //快速排序
-    void QuickSort(vector<int>& input)
+    void QuickSort(vector<int>& input, int left, int right)
     {
-        const int N = input.size();
-        int middle = N/2;
-        int i = 0;
-        int j = N-1;
-        while (i <= j)
+        if (left >= right) return ;
+        if (left == right-1)
         {
-            while (input[i] > input[middle])
-            {
-                
-            }
-            
+            if (input[left] > input[right])
+                swap(input[left], input[right]);
+            return ;
         }
-        
+
+        const int N = input.size();
+        int cut = Partition(input, left, right);
+        QuickSort(input, left, cut-1);
+        QuickSort(input, cut+1, right);        
+    }
+
+    int Partition(vector<int>& input, int left, int right)
+    {
+        if (left == right) return input[left];
+        if (left > right)  return -1;
+
+        int tempValue = input[right-1];
+        input[right-1] = input[right];
+
+        // int middle = (right - left >> 1) + left;
+        // int tempValue = input[middle];
+        // input[middle] = input[right];
+
+        while (left != right)
+        {
+            while (input[left] <= tempValue && left < right)
+                left++;
+            if (left < right)
+            {
+                // swap(input[left], input[right]);
+                input[right] = input[left];
+                right--;
+            }
+
+            while (input[right] > tempValue && left < right)
+                right--;
+            if (left < right)
+            {
+                // swap(input[left], input[right]);
+                input[left] = input[right];
+                left++;
+            }          
+        }
+        input[left] = tempValue;
+
+        return left;       
     }
 };
 /////////////////////////////////////////////////////
@@ -55,8 +91,11 @@ int main()
 {
     Solution* solution;
 
-    vector<int> input = {5,3,7,11,9,3};
-    solution->BucketSort(input, 12);
+    vector<int> input_bucket = {5,3,7,11,9,3};
+    solution->BucketSort(input_bucket, 12);
+
+    vector<int> input_quick = {6,7,4,2,8,1,0,5,3};
+    solution->QuickSort(input_quick, 0, 8);
 
     return 1;
 }
