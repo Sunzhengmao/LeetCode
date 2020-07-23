@@ -42,9 +42,24 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "mutex": "cpp",
+        "functional": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp",
+        "condition_variable": "cpp",
+        "ctime": "cpp",
+        "iterator": "cpp",
+        "ratio": "cpp",
+        "set": "cpp",
+        "sstream": "cpp",
+        "string": "cpp",
+        "xthread": "cpp",
+        "thread": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp"
     },
     "cmake.configureOnOpen": false,
-    "python.pythonPath": "D:\\software\\Anaconda\\python.exe",
+    "python.pythonPath": "D:\\software\\Anaconda\\envs\\Pytorch\\python.exe",
     "C_Cpp.errorSquiggles": "Enabled"
 }

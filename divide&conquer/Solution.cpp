@@ -128,19 +128,19 @@ public:
         }
         int cut = partition(nums, left, right);
         //当前第currentResult小的元素
-        int currentResult = cut - left + 1;
-        if (target == currentResult)
+        int cut_index = cut - left + 1;
+        if (target == cut_index)
         {
             return nums[cut];
         }
-        else if (target < currentResult)
+        else if (target < cut_index)
         {
             return select(nums, left, cut - 1, target);
         }
         else
         {
             //寻找接下来第target - currentResult小的数
-            return select(nums, cut + 1, right, target - currentResult);
+            return select(nums, cut + 1, right, target - cut_index);
         }
         return 0;
     }

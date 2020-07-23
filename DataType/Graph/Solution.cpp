@@ -159,6 +159,9 @@ public:
         cout<<"hello stupid"<<endl;
     }
 
+    //Prim算法，最小生成树
+    
+
 };
 
 
