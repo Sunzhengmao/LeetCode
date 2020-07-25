@@ -423,7 +423,7 @@ public:
     //使得 A[k] * 2 = A[i] + A[j]。那么数组 A 是漂亮数组。
     vector<int> _932_beautifulArray(int N) 
     {
-        
+        return {};
     }
 
 //==============================================================================================================
@@ -538,6 +538,101 @@ public:
         }
         return ret;        
     }
+
+//====================================================================================================================
+    //27、移除元素，给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
+    vector<int> _27_removeElement1(vector<int>& nums, int val) 
+    {
+        if (nums.size() == 0)
+            return {};
+
+        int front_index = 0;// back_index = 0;
+        for (size_t back_index = 0; back_index < nums.size(); back_index++)
+        {
+            if (nums[back_index] != val)
+            {
+                nums[front_index] = nums[back_index];
+                front_index ++;
+            }
+        }
+        vector<int> result(nums.begin(), nums.begin()+front_index);
+        return result;
+    }
+    //27、这次取front_index到最后的，我感觉这样就不用从头到尾一直
+    vector<int> _27_removeElement2(vector<int>& nums, int val) 
+    {
+        if (nums.size() == 0)
+            return {};
+
+        int front_index = 0;// back_index = 0;
+        for (size_t back_index = 0; back_index < nums.size(); back_index++)
+        {
+            if (nums[back_index] == val)
+            {
+                if (nums[front_index] == val)
+                {
+                    front_index ++;
+                }
+                else
+                {
+                    swap(nums[front_index], nums[back_index]);
+                    front_index ++;
+                }
+            }
+        }
+        vector<int> result(nums.begin()+front_index, nums.end());
+        return result;
+    }
+
+//===========================================================================================================
+    //35、给出一个排序之后的数组和val，按照大小找出target应在的index
+    int _35_searchInsert1(vector<int>&nums, int target)
+    {
+        if(nums.size()==0) return 0;
+        int left=0, right=nums.size();
+        while (left < right)
+        {
+            int middle = left + right >> 1;
+            if (nums[middle] == target) return middle;
+            if (nums[middle] < target)
+            {
+                left = middle+1;
+            }
+            else
+            {
+                right = middle;
+            }
+        }
+        return left;        
+    }
+
+//============================================================================================================
+    //66、给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。
+    vector<int> _66_plusOne1(vector<int>& digits) 
+    {
+        if (digits.empty()) return{};
+        bool needAdd = true;
+        for (int i = digits.size()-1; i >= 0; i--)
+        {
+            if (needAdd)
+            {
+                if(digits[i] >= 9)
+                {
+                    needAdd = true;
+                    digits[i] = 00;
+                }
+                else
+                {
+                    needAdd = false;
+                    digits[i] += 1;
+                    break;
+                }
+            }
+        }
+        if (needAdd) digits.insert(digits.begin(), 1);
+        return digits;
+    }
+
 };
 
 int main()
@@ -545,7 +640,6 @@ int main()
     vector<int> input={1,1,2,3,2,1,2};
     Solution* solution;
     int size=solution->_26_removeDuplicates(input);
-    cout<<"size is "<<size<<"."<<endl;
 
     //test 189
     vector<int> test189 = {1,2,3,4,5,6,7};
@@ -583,5 +677,18 @@ int main()
     //test 442
     vector<int> input442 = {4,3,2,7,8,2,3,1};
     vector<int> output442 = solution->_442_findDuplicates(input442);
+
+    //test 27
+    vector<int> input27 = {1,2,3,4};
+    vector<int> output27 = solution->_27_removeElement2(input27, 3);
+
+    //test 35
+    vector<int> input35 = {1,3,5,6};
+    int output35 = solution->_35_searchInsert1(input35, 2);
+
+    //test 66
+    vector<int> input66 = {9};
+    vector<int> output66 = solution->_66_plusOne1(input66);
+
     return 0;
 }
