@@ -3,6 +3,8 @@
 #include<map>
 #include<algorithm>
 #include<math.h>
+
+#include<unordered_map>
 using namespace std;
 /*
 比较好用的算法：抽屉法，双指针法
@@ -633,6 +635,126 @@ public:
         return digits;
     }
 
+//==============================================================================================================
+    //1、给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+    vector<int> _1_twoSum(vector<int>& nums, int target) 
+    {
+        if(nums.empty()) return {};
+        unordered_map<int, int> hashMap;
+
+        int front_index = 0;
+        for (; front_index < nums.size(); front_index++)
+        {
+            int diff = target - nums[front_index];
+            if(hashMap.find(diff) == hashMap.end())//没找到
+            {
+                hashMap.insert(make_pair(nums[front_index], front_index));
+            }
+            else
+            {
+                return vector<int>{hashMap[diff], front_index};
+            }
+        }
+        return {};        
+    }
+
+//===========================================================================================================
+    //121、给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。先买入再卖出，设计算法获取最大利润。
+    int _121_maxProfit(vector<int>& prices) 
+    {
+        if(prices.empty()) return 0;
+        int lowest_price = prices[0];
+        int max_profit = 0;
+        for (int i = 1; i < prices.size(); i++)
+        {
+            if (prices[i] < lowest_price)
+            {
+                lowest_price = prices[i];
+                continue;
+            }
+            
+            int today_profit = prices[i]-lowest_price;
+            if (today_profit > max_profit)
+            {
+                max_profit = today_profit;
+            }
+        }
+        return max_profit;
+    }
+    //122、数组的第i个元素是股票第i天的价格。设计算法计算最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）
+    int _122_maxProfit1(vector<int>& prices) //这是寻找一个一个的波峰和波谷的思想，
+    {
+        if (prices.empty()) return 0;
+        int lowest_price = prices[0];
+        int max_profit = 0;
+        int result = 0;
+        for (int i = 1; i < prices.size(); i++)
+        {
+            int today_profit = prices[i] - lowest_price;
+            if (today_profit > max_profit)
+            {
+                max_profit = today_profit;
+            }          
+            else
+            {
+                lowest_price = prices[i];
+                result += max_profit;
+                max_profit = 0;
+            }
+        }
+        result += max_profit;
+        return result;        
+    }
+    int _122_maxProfit2(vector<int> & prices)// 这里用贪心的一个算法，线性且常数空间
+    {
+        int result = 0;
+        for (int i = 1; i < prices.size(); i++)
+        {
+            if (prices[i] > prices[i-1])
+                result += prices[i] - prices[i-1];
+        }
+        return result;
+    }
+    //123、整体情况都一样，但是最多可以完成两笔交易
+    int _123_maxProfit1(vector<int>& prices) //我的想法就是把每次利润记录下来，并找出最大的两个
+    {
+        int max_profit = 0;
+        int more_profit = 0;
+        int today_profit = 0;
+        for (int i = 1; i < prices.size(); i++)
+        {
+            if (prices[i] > prices[i-1])
+            {
+                today_profit += prices[i] - prices[i-1];
+            }
+            else
+            {
+                if (today_profit > max_profit)
+                {
+                    more_profit = max_profit;
+                    max_profit = today_profit;
+                }
+                else
+                {
+                    if (today_profit > more_profit)
+                        more_profit = today_profit;
+                }
+                today_profit = 0;
+            }
+        }
+        if (today_profit > max_profit)
+        {
+            more_profit = max_profit;
+            max_profit = today_profit;
+        }
+        else
+        {
+            if (today_profit > more_profit)
+                more_profit = today_profit;
+        }
+        return max_profit + more_profit;
+
+    }
 };
 
 int main()
@@ -689,6 +811,22 @@ int main()
     //test 66
     vector<int> input66 = {9};
     vector<int> output66 = solution->_66_plusOne1(input66);
+
+    //test 1
+    vector<int> input1 = {2,17,11,15,7};
+    vector<int> output1 = solution->_1_twoSum(input1, 17);
+
+    //test 121
+    vector<int> input121 = {7,1,5,3,6,4};
+    int output121 = solution->_121_maxProfit(input121);
+
+    //test 122
+    vector<int> input122 = {1,2,3,4,5};
+    int output122 = solution->_122_maxProfit2(input122);
+
+    //test 123
+    vector<int> input123 = {1,2,4,2,5,7,2,4,9,0};
+    int output123 = solution->_123_maxProfit1(input123);
 
     return 0;
 }
