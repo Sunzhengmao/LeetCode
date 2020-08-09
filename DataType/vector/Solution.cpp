@@ -169,6 +169,39 @@ public:
             }
         }        
     }
+    void _88_merge1(vector<int>& nums1, int m, vector<int>& nums2, int n)
+    {
+        if(nums1.empty()) return;
+        int num1_idx=0, num2_idx=1;
+        int num2_first = nums2[0];
+        int left=0, right=nums1.size()-1;
+        bool mask = true;
+        while (left < right)
+        {
+            int weight = (left + right) >> 1;
+            if(nums1[weight] == num2_first) 
+            {
+                num1_idx = weight;
+                mask = false;
+                break;
+            }
+            if(num2_first < nums1[weight]) right = weight;
+            else left = weight + 1;
+        }
+        if (mask) num1_idx = left;
+        nums1.insert(nums1.begin()+num1_idx, num2_first);
+        
+        for (; num2_idx < nums2.size(); num2_idx++)
+        {
+            while(!((nums2[num2_idx] <= nums1[num1_idx]) && (nums2[num2_idx] > nums1[num1_idx-1])))
+            {
+                num1_idx++;
+            }
+            nums1.insert(nums1.begin() + num1_idx, nums2[num2_idx]);
+        }
+        
+
+    }
 
 //===========================================================================
 //==================                          ===============================
@@ -755,6 +788,51 @@ public:
         return max_profit + more_profit;
 
     }
+
+//=======================================================================================================
+    //118、给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
+    vector<vector<int>> _118_generate(int numRows) 
+    {
+        if(numRows == 0) return {};
+        vector<vector<int>> result;
+        for(int i=1; i<=numRows; i++)
+        {
+            if(i==1) 
+            {
+                result.push_back({1});
+                continue;
+            }
+            if(i==2)
+            {
+                result.push_back({1,1});
+                continue;
+            }
+            vector<int> &lastRow = result.back();
+            vector<int> thisRow = {1};
+            for(int j = 0; j<lastRow.size()-1; j++)
+            {
+                thisRow.push_back(lastRow[j] + lastRow[j+1]);
+            }
+            thisRow.push_back(1);
+            result.push_back(thisRow);
+        }
+        return result;
+    }
+
+//===============================================================================================
+    //48、给定一个 n × n 的二维矩阵表示一个图像。将图像顺时针旋转 90 度。
+    void _48_rotate(vector<vector<int>>& matrix) 
+    {
+        if(matrix.empty()) return;
+        for(int i=0; i<matrix.size(); i++)
+        {
+            for(int j=i; j<matrix.size(); j++)
+            {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+        
+    }
 };
 
 int main()
@@ -828,5 +906,7 @@ int main()
     vector<int> input123 = {1,2,4,2,5,7,2,4,9,0};
     int output123 = solution->_123_maxProfit1(input123);
 
+    //test 118
+    vector<vector<int>> output118 = solution->_118_generate(5);
     return 0;
 }
