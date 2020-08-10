@@ -833,6 +833,29 @@ public:
         }
         
     }
+//================================================================================================
+    //62、机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角。问总共有多少条不同的路径？
+    int gcd(int a,int b)   //求分子分母的最大公约数
+    {
+        return b==0?a:gcd(b,a%b);
+    }
+    int _62_uniquePaths(int m, int n) 
+    {
+        int ans=m+n-2;         //记录需走过的方格数
+        int a=1,b=1,l=n-1;     //a记录组合公式的分子，b记录组合公式的分母
+        for (int i=1;i<=n-1;i++)
+        {
+            a*=ans;
+            ans--;
+            b*=l;
+            l--;
+        //这里我们采取边乘边约分的方法，否则数据稍大是会爆int
+            int g=gcd(a,b);     //记录最大公约数
+            a/=g;               //约分
+            b/=g;               //约分
+        }
+        return a/b;
+    }
 };
 
 int main()
@@ -908,5 +931,8 @@ int main()
 
     //test 118
     vector<vector<int>> output118 = solution->_118_generate(5);
+
+    //test 62
+    int output62 = solution->_62_uniquePaths(7,3);
     return 0;
 }
