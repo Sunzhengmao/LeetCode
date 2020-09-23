@@ -160,6 +160,44 @@ public:
     }
 
     //Prim算法，最小生成树
+
+//==================================================================================================================
+    //207、课程表，给定课程数目，[0,1]在学0之前要先学会1，判断是否可以完成所有课程的学习
+    vector<int> visited;
+    bool dfs(vector<vector<int>>& edges, int startIndex) 
+    {
+        if(visited[startIndex] == 1) //证明这条路又出现了这个节点，出现了环
+            return false;
+        if(visited[startIndex] == -1) //这条路之前走过，没有问题，现在没必要再走一遍了
+            return true;
+        
+        //否则（=0）就是初始化的，都没走过，需要再走一遍
+        visited[startIndex] = 1;
+        for(auto idx : edges[startIndex])
+        {
+            if(!dfs(edges, idx))
+                return false;
+        }
+        visited[startIndex] = -1;
+        return true;
+    }    
+
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        //DFS
+        visited = vector<int>(numCourses, 0);
+        vector<vector<int>> edges(numCourses, vector<int>{});
+        for(auto edge : prerequisites)
+        {
+            edges[edge[1]].push_back(edge[0]);
+        }
+        for(int i=0; i<edges.size(); i++)
+        {
+            if(!dfs(edges, i))
+                return false;
+        }
+        return true;
+    }    
     
 
 };
@@ -188,7 +226,16 @@ int main()
     
     Dist* source = new Dist('a', 'a');
     map<char, int> scores;
-    solution->_mooc_Dijkstra(graph, source, scores);
+    // solution->_mooc_Dijkstra(graph, source, scores);
+
+    vector<vector<int>> graph_207{};
+    graph_207.push_back(vector<int>{3,0});
+    graph_207.push_back(vector<int>{3,1});
+    graph_207.push_back(vector<int>{4,1});
+    graph_207.push_back(vector<int>{4,2});
+    graph_207.push_back(vector<int>{5,3});
+    graph_207.push_back(vector<int>{5,4});
+    bool result_207 = solution->_207_canFinish(5, graph_207);
 
     return 1;
 }

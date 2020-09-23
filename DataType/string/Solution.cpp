@@ -4,6 +4,7 @@
 #include <math.h>
 #include <algorithm>
 #include <stack>
+#include <map>
 using namespace std;
 
 class Solution
@@ -343,6 +344,26 @@ public:
         return "0";
     }
 
+    // string _43_multiply_new_0813(string num1, string num2)
+    // {
+    //     if(num1=="0" || num2=="0")
+    //         return "0";
+    //      int len1 = num1.length();
+    //      int len2 = num2.length();
+    //      int number1 = 0;
+    //      for(int i=0; i<len1; i++)
+    //      {
+    //          number1 += (num1[len1-i-1]-'0') * pow(10, i);
+    //      }
+    //      string result;
+    //      for(int i=len2-1; i>=0; i--)
+    //      {
+    //         number1 * num2[i]
+    //         // result += 
+    //      }
+
+    // }
+
 //==================================================================================================================
     //1047、给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
     string _1047_removeDuplicates(string S) 
@@ -395,6 +416,138 @@ public:
             i = i >= k ? i-k : -1;
         }
         return s;       
+    }
+
+//===============================================================================================================
+    //205、给定两个字符串 s 和 t，判断它们是否是同构的。
+    //     这种方法太慢了，哎，失败
+    bool _205_isIsomorphic1(string s, string t) 
+    {
+        if(s.empty() || t.empty())
+            return false;
+        return processString(s) == processString(t);        
+    }
+    string processString(string s)
+    {
+        std::map<char, char> hash;
+        int global_cnt = 0;
+        string result;
+        for(int i=0; i<s.size(); i++)
+        {
+            // 如果没找到
+            if(hash.find(s[i]) == hash.end())
+                hash[s[i]] = (global_cnt++) + '0';
+            result += hash[s[i]];
+        }
+        return result;
+    }
+
+    bool _205_isIsomorphic2(string s, string t) 
+    {
+        std::map<char,char> hash;
+        for(int i=0; i<s.size(); i++)
+        {
+            if(hash.find(s[i]) == hash.end())
+            {
+                hash[s[i]] = t[i];
+                continue;
+            }
+            if(hash[s[i]] != t[i])
+                return false;
+        }
+        return true;
+    }
+//=======================================================================================================
+    //1528、给字符串s和一个长度相同的整数数组 indices。排列字符串s，其中第i个字符需要移动到 indices[i] 指示的位置。
+    string _1528_restoreString(string s, vector<int>& indices) 
+    {
+        if(s.empty()) return "";
+        string result(indices.size(), '0');
+        for(int i=0; i<indices.size(); i++)
+        {
+            result[i] = s[indices[i]];
+        }    
+        return result;
+    }
+//===============================================================================================================
+    //859、给定两个由小写字母构成的字符串 A 和 B ，只要可以通过交换 A 中的两个字母得到与 B 相等的结果，就返回 true ；否则返回 false 。
+    bool _859_buddyStrings(string A, string B) 
+    {
+        if(A.size() != B.size()) return false;
+        map<char, int> hash;
+        if(A == B)
+        {
+            for(int i=0; i<A.size(); i++)
+            {
+                hash[A[i]]++;
+                if(hash[A[i]]>1)
+                    return true;
+            }
+            return false;
+        }
+        int different=0;
+        vector<int> diff_vec;
+        for(int i=0; i<A.size(); i++)
+        {
+            if(A[i] == B[i])
+                continue;
+            different++;
+            diff_vec.push_back(i);
+        }
+        if (different==2)
+        {
+            if(A[diff_vec[0]] == B[diff_vec[1]] && A[diff_vec[1]]==B[diff_vec[0]])
+                return true;
+        }
+        return false;
+    }
+//========================================================================================================
+    //97、给定三个字符串 s1, s2, s3, 验证 s3 是否是由 s1 和 s2 交错组成的。
+    bool _97_isInterleave(string s1, string s2, string s3) 
+    {
+        if(s1.size() + s2.size() != s3.size()) return false;
+        int s1_idx=0, s2_idx=0;
+        for(int i=0; i<s3.size(); i++)
+        {
+            if(s1[s1_idx]!=s3[i] && s2[s2_idx]!=s3[i])
+                return false;
+            if(s1[s1_idx]==s3[i] && s2[s2_idx]!=s3[i])
+                s1_idx++;
+            else if (s1[s1_idx]!=s3[i] && s2[s2_idx]==s3[i])
+                s2_idx++;
+            else
+            {
+                return _97_isInterleave(s1.substr(s1_idx,-1), s2.substr(s2_idx+1, -1), s3.substr(i+1,-1)) || _97_isInterleave(s1.substr(s1_idx+1,-1), s2.substr(s2_idx, -1), s3.substr(i+1,-1));
+            }
+        }
+        return true;
+    }
+
+//===============================================================================================================
+    //844、给定 S 和 T 两个字符串，当它们分别被输入到空白的文本编辑器后，判断二者是否相等，并返回结果。 # 代表退格字符。
+    bool _844_backspaceCompare(string S, string T) 
+    {
+        return process(S) == process(T);
+        
+    }
+    string process(string s)
+    {
+        string result="";
+        for(int i=0; i<s.size(); i++)
+        {
+            if(s[i]=='#')
+            {
+                if(result.empty())
+                    continue;
+                result.pop_back();
+            }
+            else
+            {
+                string tmp(1,s[i]);
+                result+=tmp;
+            }
+        }
+        return result;
     }
 };
 
@@ -461,6 +614,40 @@ int main()
     string s_1209 = "deeedbbcccbdaa";
     string output_1209 = solution->_1209_removeDuplicates(s_1209, 3);
 
+    // test 205
+    bool output205 = solution->_205_isIsomorphic2("title", "abacd");
+
+    // test 97
+    string s1 = "a";
+    string s2 = "a";
+    string s3 = "aa";
+    string s4 = s1+s2;
+    bool output97 = solution->_97_isInterleave(s1, s2, s3);
+
+    // test 844
+    bool output844 = solution->_844_backspaceCompare("y#fo##f", "y#f#o##f");
     int lastOne = 1;
+
+    char str[] = "I-love-U";
+    char *p;
+    p = str;
+    cout<<p<<endl;
+    cout<<&p<<endl;
+    cout<<*p<<endl;
+    p++;
+    cout<<p<<endl;
+    cout<<&p<<endl;
+    cout<<*p<<endl;
+
+    int aaa=1;
+    int* q = &aaa;
+    cout<<q<<endl;
+    cout<<&q<<endl;
+    cout<<*q<<endl;
+    q++;
+    cout<<q<<endl;
+    cout<<&q<<endl;
+    cout<<*q<<endl;
+
     return 1;
 }

@@ -241,5 +241,13 @@ int main()
     vector<string> words_1048 = {"a","b","bac","bcade","abcdef","abcefg","abcdefg"};
     int result_1048 = solution->_1048_longestStrChain(words_1048);
 
+    map<int,int> mymap;
+    mymap.insert(pair<int,int>(1,1));
+    mymap.insert(make_pair(2,2));
+    mymap.insert({3,3});
+
+    mymap[1] ++;
+    int size1 = mymap.size();
+
     return 1;
 }

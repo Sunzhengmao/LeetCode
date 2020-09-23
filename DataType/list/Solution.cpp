@@ -284,6 +284,47 @@ public:
         return result;
     }
 
+//==============================================================================================================
+    //24、给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。不能单纯改变节点内部的值，而是需要实际的进行节点交换。
+    ListNode* _24_swapPairs(ListNode* head) 
+    {
+        if(!head->next || !head) return head;
+        head = swapTwoNode(head);
+        ListNode* result = head;
+        while (head->next->next)
+        {
+            head->next->next = swapTwoNode(head->next->next);
+            head = head->next->next;
+        }
+        return nullptr;
+    }
+    ListNode* swapTwoNode(ListNode* head)
+    {
+        if(!head || !head->next) return head;
+        ListNode* temp = new ListNode(head->val);//当前这个
+        ListNode* head2 = head->next;            //下一个
+        temp->next = head2->next;
+        head2->next = temp;
+        return head2;
+    }
+
+//=======================================================================================================
+    //141、给定一个链表，判断链表中是否有环
+    bool _141_hasCycle(ListNode *head) 
+    {
+        if(!head) return false; 
+        ListNode* lowAddr = head;
+        ListNode* fastAddr = head->next;
+        while(head && lowAddr!=fastAddr)
+        {
+            head = head->next;
+            lowAddr = lowAddr->next;
+            fastAddr = fastAddr->next->next;
+            if(!lowAddr || !fastAddr) return false;
+        }
+        if(lowAddr==fastAddr) return true;
+        else return false;
+    }
 };
 
 
@@ -315,7 +356,7 @@ int main()
     vector<int> headB_ = {5,0,1,8,4,5};
     ListNode* headA = solution->initial(headA_);
     ListNode* headB = solution->initial(headB_);
-    ListNode* result = solution->getIntersectionNode(headA, headB);
+    ListNode* result = solution->_160_getIntersectionNode_doublePointer(headA, headB);
 
     //test 203
     vector<int> head_203={1,1,2};
@@ -327,6 +368,15 @@ int main()
     ListNode* head61 = solution->initial(head_61);
     ListNode* ouput61 = solution->_61_rotateRight_shunshizhen(head61, 2);
     
+    //test 24
+    vector<int> head_24={1,2,3,4};
+    ListNode* head24 = solution->initial(head_24);
+    ListNode* output24 = solution->_24_swapPairs(head24);
+
+    //test 141
+    vector<int> head_141 = {1,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4,2,3,4};
+    ListNode* head141 = solution->initial(head_141);
+    bool output141 = solution->_141_hasCycle(head141);
 
     return 1;
 }

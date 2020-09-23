@@ -449,6 +449,50 @@ public:
         
     }
 
+//===========================================================================================================
+    //637、二叉树的层序遍历，求均值
+            //为啥我看答案呢，因为我没想明白怎么确定这一层到头了
+    vector<double> averageOfLevels(TreeNode* root)
+    {
+        queue<TreeNode*> que;
+        if(root != nullptr) que.push(root);
+        vector<double> ans={};
+        while(!que.empty())
+        {
+            int size = que.size();  
+            double sum = 0;
+            for(int i=0; i<size; i++)
+            {
+                TreeNode* temp = que.front();
+                sum += temp->val;
+                if(temp->left) que.push(temp->left);
+                if(temp->right) que.push(temp->right);
+                que.pop();
+            }
+            ans.push_back(sum / size);
+        }
+        return ans;
+    }
+
+//=============================================================================================================
+    //538、二叉树转成累加树
+    TreeNode* convertBST_538(TreeNode* root) {
+        dfs(root);
+        return root;
+    }
+
+    int sum=0;
+
+    void dfs(TreeNode* root)
+    {
+        if(!root) return ;
+        if(root->right) dfs(root->right);
+        sum += root->val;
+        root->val = sum;
+        if(root->left) dfs(root->left);
+    }
+
+
 };
 
 int main()
@@ -496,6 +540,10 @@ int main()
     TreeNode* root_337 = solution->initialTreeNode(vec_337);
     int result_337 = solution->_337_rob(root_337);
 
+    //test 538
+    vector<string> vec_538 = {"5", "2", "13"};
+    TreeNode* root_538 = solution->initialTreeNode(vec_538);
+    TreeNode* output538 = solution->convertBST_538(root_538);
 
     return 1;
 }

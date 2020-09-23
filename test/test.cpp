@@ -11,58 +11,47 @@ using namespace std;
  
 //声明一个模板
 typedef std::function<int(int)> Functional;
+int paintingPlan(int n, int k);
+int Cnm(int n, int m);
  
- 
-//normal function
-int TestFunc(int a)
+int paintingPlan(int n, int k) 
 {
-    return a;
+        if(k<n) return 0;
+        if(k==n*n) return 1;
+        int ans = 0;
+        if(k%n==0) //整除n
+        {
+            ans += 2* Cnm(n,k/n);
+        }
+        int ans2 = 0;
+        for(int i=1; i<=n; i++)
+        {
+            for(int j=1; j<=n; j++)
+            {
+                int temp = n*i + n*j - i*j;
+                if(k == temp)
+                    ans2++;
+            }
+        }
+        return ans + ans2/2;
 }
- 
-//lambda expression
-auto lambda = [](int a)->int{return a;};
- 
-//functor仿函数
-class Functor
-{
-public:
-    int operator() (int a)
-    {
-        return a;
-    }
-};
- 
- 
-//类的成员函数和类的静态成员函数
-class CTest
-{
-public:
-    int Func(int a)
-    {
-        return a;
-    }
-    static int SFunc(int a)
-    {
-        return a;
-    }
-};
 
-void params(std::function<void()> param)
+int Cnm(int n, int m)
 {
-    cout<<"param start"<<endl;
-    param();
-    cout<<"param end"<<endl;
-}
- 
-
-void output_something()
-{
-    cout<<"in the void function and output something..."<<endl;
+    int fenzi = 1;
+    int fenmu = 1;
+    for(int i=0; i<m; i++)
+    {
+        fenzi *= n-i;
+        fenmu *= i+1;
+    }
+    return int(fenzi/fenmu);
 }
 
 int main(int argc, char* argv[])
 {
-    params(output_something);
+    int ans = paintingPlan(4,13);
+    // params(output_something);
 
     // //封装普通函数
     // Functional obj = TestFunc;

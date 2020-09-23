@@ -835,6 +835,7 @@ public:
     }
 //================================================================================================
     //62、机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角。问总共有多少条不同的路径？
+    //////////////////////////////////  大名鼎鼎的动态规划  ///////////////////////////////////
     int gcd(int a,int b)   //求分子分母的最大公约数
     {
         return b==0?a:gcd(b,a%b);
@@ -855,6 +856,24 @@ public:
             b/=g;               //约分
         }
         return a/b;
+    }
+
+//=========================================================================================================
+    //78、给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。说明：解集不能包含重复的子集。
+    vector<vector<int>> _78_subsets(vector<int>& nums) 
+    {
+        // if(nums.empty()) return {};
+        vector<vector<int>> result{{}};//已经放了空的在里面了
+        for(int i=0; i<nums.size(); i++)
+        {
+            vector<vector<int>> temp_result = result;
+            for(auto &item : temp_result)
+            {
+                item.push_back(nums[i]);
+                result.push_back(item);
+            }
+        }
+        return result;
     }
 };
 
@@ -934,5 +953,9 @@ int main()
 
     //test 62
     int output62 = solution->_62_uniquePaths(7,3);
+
+    //test 78
+    vector<int> input78{};
+    vector<vector<int>> output78 = solution->_78_subsets(input78);
     return 0;
 }
