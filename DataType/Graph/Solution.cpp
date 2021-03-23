@@ -182,7 +182,7 @@ public:
         return true;
     }    
 
-    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) 
+    bool _207_canFinish_dfs(int numCourses, vector<vector<int>>& prerequisites) 
     {
         //DFS
         visited = vector<int>(numCourses, 0);
@@ -198,7 +198,85 @@ public:
         }
         return true;
     }    
+
+    // 用BFS再实现一遍吧
+    bool _207_canFinish_bfs(int numCourses, vector<vector<int>>& prerequisites) 
+    {
+        //BFS
+        vector<vector<int>> edges(numCourses);
+        vector<int> indegree(numCourses,0);
+
+        for(auto edge : prerequisites)
+        {
+            edges[edge[1]].push_back(edge[0]);
+            indegree[edge[0]]++;
+        }
+
+        queue<int> que;
+        for (size_t i = 0; i < edges.size(); i++)
+        {
+            if(indegree[i]==0) 
+                que.push(i);
+        }
+
+        int ans = 0;
+        while (!que.empty())        
+        {
+            int i = que.front();
+            que.pop();
+            ans++;
+            for(auto j : edges[i])
+            {
+                indegree[j]--;
+                if(indegree[j] == 0)
+                    que.push(j);
+            }
+        }
+        return ans == numCourses;
+        
+    }   
     
+//==============================================================================================================================
+    //1162、分析陆地到海洋的最远曼哈顿距离
+    int maxDistance(vector<vector<int>>& grid)
+    {
+        int direct[5] = {0,1,0,-1,0};
+        queue<pair<int,int>> que;
+        int gridsize = grid.size();
+        for(int i=0; i<grid.size(); i++)
+        {
+            for(int j=0; j<grid.size(); j++)
+            {
+                if(grid[i][j]==1)
+                    que.push({i,j});
+            }
+        }
+
+        if(que.empty() || que.size()==gridsize*gridsize)
+            return -1;
+
+        pair<int,int> temp;
+        while (!que.empty())
+        {
+            int size = que.size();
+            for(int i=0; i<size; i++)
+            {
+                temp = que.front();
+                que.pop();
+                for(int j=0; j<4; j++)
+                {
+                    int x = temp.first + direct[j];
+                    int y = temp.second + direct[j+1];
+                    if(x<0 || y<0 || x>gridsize || y>gridsize)
+                        continue;
+                    grid[x][y] = grid[temp.first][temp.second] + 1;
+                    que.push({x,y});
+                }
+            }
+        }
+        return grid[temp.first][temp.second]-1;
+        
+    }
 
 };
 
@@ -235,7 +313,7 @@ int main()
     graph_207.push_back(vector<int>{4,2});
     graph_207.push_back(vector<int>{5,3});
     graph_207.push_back(vector<int>{5,4});
-    bool result_207 = solution->_207_canFinish(5, graph_207);
+    bool result_207 = solution->_207_canFinish_bfs(5, graph_207);
 
     return 1;
 }

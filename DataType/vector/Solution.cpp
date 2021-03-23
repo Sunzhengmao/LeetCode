@@ -875,12 +875,44 @@ public:
         }
         return result;
     }
+
+    void sortColors(vector<int>& nums) 
+    {
+        int l = 0;
+        int r = nums.size()-1;
+        int i=l;
+        while(i<=r)
+        {
+            if(nums[i]==0)
+            {
+                swap(nums[i], nums[l]);
+                i++;l++;
+            }
+            else
+            {
+                if(nums[i]==2)
+            {
+                swap(nums[i], nums[r]);
+                r--;
+            }
+            else
+            {
+                i++;
+            }
+            }
+        }
+        
+    }
+
 };
 
 int main()
 {
-    vector<int> input={1,1,2,3,2,1,2};
     Solution* solution;
+
+    vector<int> input_75 = {2,0,1};
+    solution->sortColors(input_75);
+    vector<int> input={1,1,2,3,2,1,2};
     int size=solution->_26_removeDuplicates(input);
 
     //test 189

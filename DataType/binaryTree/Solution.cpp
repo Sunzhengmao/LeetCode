@@ -157,7 +157,6 @@ public:
             for (int j = 0; j < fatherNode.size(); j++)
             {
                 TreeNode* left=NULL;
-                TreeNode* right=NULL;
                 if (i < vec.size())
                 {
                     if(vec[i]!="null") 
@@ -170,7 +169,8 @@ public:
                 else break;
                 i++;
 
-                if (i<vec.size()) 
+                TreeNode* right=NULL;
+                if (i < vec.size()) 
                 {
                     if(vec[i]!="null") 
                     {
@@ -477,21 +477,205 @@ public:
 //=============================================================================================================
     //538、二叉树转成累加树
     TreeNode* convertBST_538(TreeNode* root) {
-        dfs(root);
+        dfs_538(root);
         return root;
     }
 
     int sum=0;
 
-    void dfs(TreeNode* root)
+    void dfs_538(TreeNode* root)
     {
         if(!root) return ;
-        if(root->right) dfs(root->right);
+        if(root->right) dfs_538(root->right);
         sum += root->val;
         root->val = sum;
-        if(root->left) dfs(root->left);
+        if(root->left) dfs_538(root->left);
     }
 
+//===========================================================================================================
+
+    vector<int> findMode(TreeNode* root) 
+    {
+        stack<TreeNode*> st;
+        TreeNode* tmp = root;
+
+        while(!st.empty() || tmp)
+        {
+            while(tmp)
+            {
+                st.push(tmp);
+                tmp = tmp->left;
+            }
+
+            TreeNode* top = st.top();
+            st.pop();
+
+
+            tmp = top->right;
+        }
+        // if (!root) return {};
+        // vector<int> ans;
+        // // BST 的中序遍历 是 顺序排列的。
+
+        // stack<TreeNode *> st; 
+        // TreeNode * tmp = root;
+
+        // // ma 出现最多的 次数， last 上一次出现的值。 now 当前数已经出现过的次数。
+        // int ma = 0, last = -1, now = 0;
+
+        // // 迭代写法。 没有使用递归。手写栈模拟系统栈 ，实现递归程序。
+        // while (!st.empty() || tmp)
+        // {
+        //     while (tmp)
+        //     {
+        //         st.push(tmp);
+        //         tmp = tmp->left;
+        //     }
+
+        //     TreeNode * t = st.top();
+        //     st.pop();
+
+        //     if (last == t->val) now ++ ;
+        //     else  now = 1;
+            
+        //     if (now > ma){
+        //         ans.clear();
+        //         ans.push_back(t->val);
+        //         ma = now;
+        //     }
+        //     else if (now == ma){
+        //         ans.push_back(t->val);
+        //     }
+
+        //     last = t->val;
+        //     tmp = t->right;
+        // }
+
+        return {};
+    }
+
+    // void dfs1(TreeNode* root)
+    // {
+    //     if(!root) return;
+    //     if(root->left) dfs(root->left);
+    //     if(first1)
+    //     {
+    //         last1 = root->val;
+    //         freq1 ++;
+    //         first1 = 0;
+    //     }
+    //     else
+    //     {
+    //         if(root->val == last1)
+    //         {
+    //             freq1 ++;
+    //         }
+    //         else
+    //         {
+    //             if(freq1 > max_frequence)
+    //             {
+    //                 max_frequence = freq1;
+    //                 freq1 = 0;
+    //                 ans1 = {};
+    //                 ans1.push_back(root->val);
+    //                 first1 = 1;
+    //             }
+    //             else{
+    //                 if(freq1 == max_frequence)
+    //                 {
+    //                     ans1.push_back(root->val);
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     if(root->right) dfs(root->right);
+    // }
+
+
+//=============================================================================================================
+    //113、路径总和
+    // vector<vector<int>> _113_pathSum(TreeNode* root, int sum) {
+    //     vector<vector<int>> ans;
+    //     vector<int> path;
+    //     if(!root) return {};
+    //     dfs(ans, path, root, sum);
+    //     return ans;
+    // }
+
+    // void dfs(vector<vector<int>>& ans, vector<int> path, TreeNode* root, int sum)
+    // {
+    //     path.push_back(root->val);
+    //     sum -= root->val;
+    //     if(!root->left && !root->right && sum == 0)
+    //     {
+    //         ans.push_back(path);
+    //         return;
+    //     }
+    //     if(root->left)
+    //     {
+    //         dfs(ans, path, root->left, sum);
+    //     }
+    //     if(root->right)
+    //     {
+    //         dfs(ans, path, root->right, sum);
+    //     }
+    //     path.pop_back();
+    // }
+
+    // vector<vector<int>> ret{};
+    // vector<int> path{};
+
+    // void dfs(TreeNode* root, int sum) {
+    //     if (root == nullptr) {
+    //         return;
+    //     }
+    //     path.emplace_back(root->val);
+    //     sum -= root->val;
+    //     if (root->left == nullptr && root->right == nullptr && sum == 0) {
+    //         ret.emplace_back(path);
+    //     }
+    //     dfs(root->left, sum);
+    //     dfs(root->right, sum);
+    //     path.pop_back();
+    // }
+
+    // vector<vector<int>> pathSum(TreeNode* root, int sum) {
+    //     dfs(root, sum);
+    //     return ret;
+    // }
+
+//===========================================================================================================
+    TreeNode* deleteNode_450(TreeNode* root, int key) {
+        if(!root) return root;
+        if(root->val == key) {
+            if(!root->left && !root->right) {
+                root = nullptr;
+            }
+            else if(root->left && root->right) {
+                TreeNode* cur = root->right;
+                while(cur->left) {
+                    cur = cur->left;
+                }
+                TreeNode* cur_r = cur;
+                cur->left = root->left;
+                while(cur_r->right) {
+                    cur_r = cur_r->right;
+                }
+                cur_r->right = root->right;
+                root = cur;       
+            }
+            else {
+                root = root->left==nullptr ? root->right : root->left;
+            }
+        }
+        else if(root->val < key) {
+            root->right = deleteNode_450(root->right, key);
+        }
+        else 
+            root->left = deleteNode_450(root->left, key);
+        return root;
+    }
 
 };
 
@@ -543,7 +727,32 @@ int main()
     //test 538
     vector<string> vec_538 = {"5", "2", "13"};
     TreeNode* root_538 = solution->initialTreeNode(vec_538);
-    TreeNode* output538 = solution->convertBST_538(root_538);
+    // TreeNode* output538 = solution->convertBST_538(root_538);
+
+    vector<string> c_503 = {"1"};
+    TreeNode* root_503 = solution->initialTreeNode(c_503);
+    // vector<int> result503 = solution->findMode(root_503);
+
+    vector<string> c_113 = {"5","4","8","11","null","13","4","7","2","null","null","5","1"};
+    TreeNode* root_113 = solution->initialTreeNode(c_113);
+    // vector<vector<int>> ans_113 = solution->pathSum(root_113, 22);
+
+    vector<int> path;
+    int a = 1;
+    path.push_back(a);
+
+    queue<int>que;
+    que.push(1);
+
+    vector<string> c_450 = {"5","3","6","2","4","null","7"};
+    TreeNode* tree_450 = solution->initialTreeNode(c_450);
+    // TreeNode* res = solution->deleteNode_450(tree_450, 3);
+
+    char c_a = 'a';
+    char c_b = 'b';
+    char* const p = &c_a;
+    // p = &c_b;//right
+    *p = 'c';//error
 
     return 1;
 }
